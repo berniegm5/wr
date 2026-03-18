@@ -191,10 +191,22 @@ color: var(–gold);
 .prenda {
 display: flex;
 align-items: center;
-padding: 15px 0;
-border-bottom: 1px solid var(–ivory);
+padding: 13px 14px 13px 0;
 gap: 14px;
 animation: slideIn .3s ease both;
+border-bottom: 1px solid var(–ivory);
+position: relative;
+border-radius: 8px;
+overflow: hidden;
+}
+.prenda::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: linear-gradient(90deg, var(–row-color, transparent) 0%, transparent 70%);
+opacity: .18;
+pointer-events: none;
+border-radius: inherit;
 }
 .prenda:last-child { border-bottom: 1px solid var(–border); }
 .prenda.na { opacity: .3; }
@@ -204,7 +216,10 @@ from { opacity: 0; transform: translateY(6px); }
 to   { opacity: 1; transform: translateY(0); }
 }
 
-.prenda-icon { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+.prenda-icon-wrap { width: 36px; height: 36px; display:flex; align-items:center; justify-content:center; flex-shrink:0; position:relative; z-index:1; }
+.prenda-icon-wrap svg { width: 28px; height: 28px; }
+.prenda-color-dot { display:none; }
+.prenda-color-dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; border: 1.5px solid rgba(0,0,0,.12); box-shadow: 0 1px 4px rgba(0,0,0,.18); }
 .prenda-body { flex: 1; min-width: 0; }
 .prenda-cat {
 font-size: 8px;
@@ -531,36 +546,128 @@ const DEFAULT = {
   trabajo:{
     arriba:["Polo blanco liso","Polo azul marino","Polo gris claro","Camiseta negra básica","Polo verde olivo","Polo burdeos","Camiseta blanca cuello V","Polo beige","Oxford blanca","Oxford azul claro","Camisa cuadros grises","Camisa azul marino","Camisa blanca slim","Camisa beige lino","Oxford celeste","Oxford rayas finas"],
     pantalon:["Chino beige","Chino negro","Chino gris","Chino azul marino","Pantalón dress negro","Pantalón dress gris","Chino marrón","Pantalón dress azul"],
-    tenis:null,
-    formal:["Derby negro","Oxford café","Derby marrón","Monk strap negro","Oxford cognac","Derby azul","Mocasín negro","Derby gris"],
-    casual_shoe:null,
+    calzado:["Derby negro","Oxford café","Derby marrón","Monk strap negro","Oxford cognac","Derby azul","Mocasín negro","Derby gris"],
     chamarra:["Sin chamarra","Blazer gris","Blazer azul marino","Blazer negro","Blazer beige","Blazer cuadros","Blazer camel","Blazer burdeos"],
   },
   cita:{
     arriba:["Camiseta negra slim","Camiseta blanca básica","Camiseta gris oscuro","Camiseta burdeos","Polo negro","Camiseta vino","Camisa negra","Camisa blanca slim","Camisa azul oscuro","Camisa gris marengo","Camisa vino","Oxford blanca","Camisa burdeos","Camisa gris carbón"],
     pantalon:["Jeans negro slim","Chino negro","Jeans azul oscuro slim","Pantalón gris oscuro","Jeans gris","Chino marrón oscuro","Jeans negro skinny","Jeans azul índigo"],
-    tenis:["Sneakers blancos limpios","Sneakers negros","Sneakers gris claro","Sneakers cuero blanco","Sneakers negro mate","Sneakers minimalistas"],
-    formal:["Derby negro","Chelsea boots negro","Oxford café oscuro","Chelsea boots café","Monk strap negro","Chelsea boots cognac"],
-    casual_shoe:null,
+    calzado:["Derby negro","Chelsea boots negro","Oxford café oscuro","Chelsea boots café","Monk strap negro","Chelsea boots cognac","Sneakers blancos limpios","Sneakers negros","Sneakers gris claro","Sneakers cuero blanco"],
     chamarra:["Sin chamarra","Bomber negra","Chaqueta cuero negra","Blazer negro","Bomber gris","Blazer azul marino","Bomber azul marino","Blazer negro slim"],
   },
   casual:{
     arriba:["Camiseta blanca básica","Camiseta negra","Camiseta gris","Camiseta azul","Camiseta verde","Camiseta estampada","Polo blanco","Camiseta mostaza","Camisa flanela cuadros","Overshirt mezclilla","Camisa hawaiana","Camisa lino beige","Camisa flanela gris","Overshirt verde","Camisa lino blanca","Camisa café lino"],
     pantalon:["Jeans azul clásico","Jeans negro","Jeans gris","Shorts beige","Shorts azul","Jogger gris","Cargo verde","Shorts negro"],
-    tenis:["Tenis blancos","Tenis negros","Tenis grises","Converse blanco","Converse negro","Vans negros","Tenis coloridos","Vans gris"],
-    formal:null,
-    casual_shoe:["Huaraches cuero","Sandalias café","Slip-on negro","Mocasín casual beige","Espadrilles beige","Slip-on blanco","Sandalias negras","Slip-on gris"],
+    calzado:["Tenis blancos","Tenis negros","Tenis grises","Converse blanco","Converse negro","Vans negros","Vans gris","Huaraches cuero","Sandalias café","Slip-on negro","Mocasín casual beige","Espadrilles beige"],
     chamarra:["Sin chamarra","Hoodie gris","Hoodie negro","Bomber verde","Chaqueta mezclilla","Overshirt flanela","Hoodie blanco","Bomber beige"],
   }
 };
 
+// ── ICONOS SVG POR TIPO ──
+const CAT_SVGS = {
+  arriba:   '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="22" width="28" height="34" rx="2" stroke="COLOR" stroke-width="2.5"/><path d="M18 22 L8 28 L8 36 L18 33" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M46 22 L56 28 L56 36 L46 33" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 22 Q32 28 38 22" stroke="COLOR" stroke-width="2.5"/></svg>',
+  pantalon: '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="10" width="36" height="8" rx="1" stroke="COLOR" stroke-width="2.5"/><path d="M14 18 L14 54 Q14 57 20 57 L26 57 Q30 57 32 54 L32 18" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 18 L50 54 Q50 57 44 57 L38 57 Q34 57 32 54 L32 18" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/></svg>',
+  calzado:  '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 44 L10 32 Q16 24 26 23 L44 22 Q54 22 58 34 L58 44" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M6 44 L6 50 Q6 56 14 56 L54 56 Q60 56 60 50 L60 44 Z" stroke="COLOR" stroke-width="2.5"/><path d="M24 24 L22 40" stroke="COLOR" stroke-width="2"/><line x1="26" y1="28" x2="38" y2="27" stroke="COLOR" stroke-width="1.8"/><line x1="25" y1="34" x2="37" y2="33" stroke="COLOR" stroke-width="1.8"/></svg>',
+  chamarra: '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="20" width="28" height="38" rx="2" stroke="COLOR" stroke-width="2.5"/><path d="M18 20 L6 26 L6 52 L18 50" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M46 20 L58 26 L58 52 L46 50" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 20 L32 32 L26 20" stroke="COLOR" stroke-width="2" stroke-linejoin="round"/><path d="M46 20 L32 32 L38 20" stroke="COLOR" stroke-width="2" stroke-linejoin="round"/><line x1="32" y1="32" x2="32" y2="58" stroke="COLOR" stroke-width="1.5" stroke-dasharray="3 2"/></svg>',
+};
+
+// ── DETECCIÓN DE COLOR AUTOMÁTICA ──
+const COLOR_MAP = [
+  {words:['blanco','blanca','white','cream','crema'],        color:'#f5f5f0'},
+  {words:['negro','negra','black','oscuro','oscura'],        color:'#1a1a1a'},
+  {words:['gris','gray','grey','marengo','charcoal','plomo'],color:'#6b6b6b'},
+  {words:['azul marino','navy','marino'],                    color:'#1a2f5a'},
+  {words:['azul','blue','celeste','indigo','índigo'],        color:'#3a6ea8'},
+  {words:['rojo','red'],                                     color:'#b02020'},
+  {words:['burdeos','burdeos','bordo','vino','granate'],     color:'#6a1a2a'},
+  {words:['verde','green','olivo','oliva','militar'],        color:'#3a6a3a'},
+  {words:['beige','arena','crudo','lino','camel','cognac'],  color:'#c8a97a'},
+  {words:['marrón','marron','café','brown','chocolate'],     color:'#6a4a2a'},
+  {words:['mostaza','amarillo','yellow'],                    color:'#c8a020'},
+  {words:['naranja','orange'],                               color:'#c86020'},
+  {words:['morado','purple','lila','lavanda'],               color:'#6a3a8a'},
+  {words:['rosa','pink'],                                    color:'#d4809a'},
+  {words:['cuadros','franela','rayas','estampado','hawaiana'],color:'#8a7a6a'},
+];
+
+function detectColor(name) {
+  const lower = name.toLowerCase();
+  for (const entry of COLOR_MAP) {
+    for (const w of entry.words) {
+      if (lower.includes(w)) return entry.color;
+    }
+  }
+  return '#a0a0a0';
+}
+
+// ── LÓGICA DE COMBINACIONES ──
+// Basado en las paletas de tu imagen: qué grupos de color combinan bien
+const COLOR_GROUPS = {
+  azul_marino: ['azul marino','navy','marino','índigo','indigo','azul oscuro'],
+  azul_gris:   ['azul gris','azul claro','celeste','azul petróleo','petróleo'],
+  negro:       ['negro','negra','black','oscuro','oscura','carbón','carbon','charcoal','marengo'],
+  gris:        ['gris','gray','grey','plomo'],
+  blanco:      ['blanco','blanca','white','crema','cream','ivory'],
+  beige:       ['beige','arena','crudo','lino','camel','champagne'],
+  cafe:        ['café','cafe','marrón','marron','brown','cognac','chocolate','mocha'],
+  verde:       ['verde','green','olivo','oliva','militar','salvia','sage'],
+  vino:        ['vino','burdeos','bordo','granate','maroon','burdeos'],
+  caramelo:    ['caramelo','caramel','naranja','mostaza','teal'],
+};
+
+// Pares de grupos que combinan bien (de tu imagen)
+const GOOD_COMBOS = [
+  ['azul_marino','beige'],   // Azul marino y beige ✓
+  ['azul_marino','cafe'],    // Azul y khaki ✓
+  ['azul_marino','verde'],   // Azul y verde ✓
+  ['cafe','beige'],          // Café y beige ✓
+  ['cafe','verde'],          // Café y verde ✓
+  ['verde','beige'],         // Verde y beige ✓
+  ['negro','gris'],          // Negro y gris ✓
+  ['negro','beige'],         // Negro y beige ✓
+  ['negro','cafe'],          // Negro y café ✓
+  ['gris','cafe'],           // Gris y marrón ✓
+  ['gris','beige'],          // Azul gris y beige ✓
+  ['blanco','azul_marino'],  // Blanco y azul ✓
+  ['blanco','negro'],        // Blanco y negro ✓
+  ['vino','cafe'],           // Vino y marrón ✓
+  ['caramelo','beige'],      // Caramelo y beige ✓
+  ['azul_gris','beige'],     // Azul gris y beige ✓
+  ['verde','cafe'],          // Verde salvia y café ✓
+];
+
+function getColorGroup(name) {
+  const lower = name.toLowerCase();
+  for (const [group, words] of Object.entries(COLOR_GROUPS)) {
+    if (words.some(w => lower.includes(w))) return group;
+  }
+  return null;
+}
+
+function colorsMatch(name1, name2) {
+  const g1 = getColorGroup(name1);
+  const g2 = getColorGroup(name2);
+  if (!g1 || !g2 || g1 === g2) return true; // si no detecta, deja pasar
+  return GOOD_COMBOS.some(([a,b]) => (a===g1&&b===g2)||(a===g2&&b===g1));
+}
+
+function randCompatible(opts, anchors) {
+  if (!opts || !opts.length) return null;
+  // Try up to 12 times to find a color-compatible option
+  for (let i = 0; i < 12; i++) {
+    const candidate = opts[Math.floor(Math.random() * opts.length)];
+    const compatible = anchors.every(a => colorsMatch(candidate, a));
+    if (compatible) return candidate;
+  }
+  // fallback: just random
+  return opts[Math.floor(Math.random() * opts.length)];
+}
+
 const CATS = [
-  {key:'arriba',     icon:'👕', label:'Partie du haut'},
-  {key:'pantalon',   icon:'👖', label:'Pantalón'},
-  {key:'tenis',      icon:'👟', label:'Tenis / Sneakers'},
-  {key:'formal',     icon:'👞', label:'Calzado formal'},
-  {key:'casual_shoe',icon:'🥾', label:'Calzado casual'},
-  {key:'chamarra',   icon:'🧥', label:'Chamarra'},
+  {key:'arriba',   icon:'👕', label:'Parte de arriba'},
+  {key:'pantalon', icon:'👖', label:'Pantalón'},
+  {key:'calzado',  icon:'👞', label:'Calzado'},
+  {key:'chamarra', icon:'🧥', label:'Chamarra'},
 ];
 
 const TITLES = {
@@ -598,13 +705,35 @@ function generar(animate=true){
   list.innerHTML='';
   const data=prendas[occ];
 
+  // Pick arriba first as color anchor
+  const arribaOpts = data['arriba'];
+  const arribaVal = arribaOpts && arribaOpts.length ? rand(arribaOpts) : null;
+  const chosen = {};
+  if (arribaVal) chosen['arriba'] = arribaVal;
+
   CATS.forEach((cat,i)=>{
-    const opts=data[cat.key];
-    const row=document.createElement('div');
-    row.className='prenda'+((!opts||!opts.length)?' na':'');
-    row.style.animationDelay=(i*50)+'ms';
-    const val=opts&&opts.length ? rand(opts) : 'Non applicable';
-    row.innerHTML=`<div class="prenda-icon">${cat.icon}</div><div class="prenda-body"><div class="prenda-cat">${cat.label}</div><div class="prenda-val">${val}</div></div>`;
+    const opts = data[cat.key];
+    const row = document.createElement('div');
+    row.className = 'prenda' + ((!opts||!opts.length) ? ' na' : '');
+    row.style.animationDelay = (i*50)+'ms';
+
+    let val;
+    if (!opts || !opts.length) {
+      val = 'No aplica';
+    } else if (cat.key === 'arriba') {
+      val = arribaVal || rand(opts);
+    } else {
+      // pick color-compatible with already chosen pieces
+      const anchors = Object.values(chosen);
+      val = randCompatible(opts, anchors);
+    }
+    chosen[cat.key] = val;
+
+    const color = detectColor(val);
+    row.style.setProperty('--row-color', color);
+    const svgRaw = (CAT_SVGS[cat.key] || '').split('COLOR').join(color);
+    const rowHtml = '<div class="prenda-icon-wrap" style="background:' + color + '15;border:1.5px solid ' + color + '30;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0">' + svgRaw + '</div><div class="prenda-body"><div class="prenda-cat">' + cat.label + '</div><div class="prenda-val">' + val + '</div></div>';
+    row.innerHTML = rowHtml;
     list.appendChild(row);
   });
 }
@@ -692,7 +821,7 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-load(); generar(false);
+
 </script>
 
 </body>
