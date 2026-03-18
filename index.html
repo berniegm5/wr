@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -165,8 +166,7 @@ body::after { content:''; position:fixed; inset:0; background-image:url("data:im
 <script>
 const DEFAULT = {
   trabajo:{
-    camiseta:["Polo blanco liso","Polo azul marino","Polo gris claro","Camiseta negra básica","Polo verde olivo","Polo burdeos","Camiseta blanca cuello V","Polo beige"],
-    camisa:["Oxford blanca","Oxford azul claro","Camisa cuadros grises","Camisa azul marino","Camisa blanca slim","Camisa beige lino","Oxford celeste","Oxford rayas finas"],
+    arriba:["Polo blanco liso","Polo azul marino","Polo gris claro","Camiseta negra básica","Polo verde olivo","Polo burdeos","Camiseta blanca cuello V","Polo beige","Oxford blanca","Oxford azul claro","Camisa cuadros grises","Camisa azul marino","Camisa blanca slim","Camisa beige lino","Oxford celeste","Oxford rayas finas"],
     pantalon:["Chino beige","Chino negro","Chino gris","Chino azul marino","Pantalón dress negro","Pantalón dress gris","Chino marrón","Pantalón dress azul"],
     tenis:null,
     formal:["Derby negro","Oxford café","Derby marrón","Monk strap negro","Oxford cognac","Derby azul","Mocasín negro","Derby gris"],
@@ -174,8 +174,7 @@ const DEFAULT = {
     chamarra:["Sin chamarra","Blazer gris","Blazer azul marino","Blazer negro","Blazer beige","Blazer cuadros","Blazer camel","Blazer burdeos"],
   },
   cita:{
-    camiseta:["Camiseta negra slim","Camiseta blanca básica","Camiseta gris oscuro","Camiseta burdeos","Camiseta azul marino","Polo negro","Camiseta vino","Polo gris"],
-    camisa:["Camisa negra","Camisa blanca slim","Camisa azul oscuro","Camisa gris marengo","Camisa vino","Oxford blanca","Camisa burdeos","Camisa gris carbón"],
+    arriba:["Camiseta negra slim","Camiseta blanca básica","Camiseta gris oscuro","Camiseta burdeos","Camiseta azul marino","Polo negro","Camiseta vino","Polo gris","Camisa negra","Camisa blanca slim","Camisa azul oscuro","Camisa gris marengo","Camisa vino","Oxford blanca","Camisa burdeos","Camisa gris carbón"],
     pantalon:["Jeans negro slim","Chino negro","Jeans azul oscuro slim","Pantalón gris oscuro","Jeans gris","Chino marrón oscuro","Jeans negro skinny","Jeans azul índigo"],
     tenis:["Sneakers blancos limpios","Sneakers negros","Sneakers gris claro","Sneakers cuero blanco","Sneakers negro mate","Sneakers minimalistas"],
     formal:["Derby negro","Chelsea boots negro","Oxford café oscuro","Chelsea boots café","Monk strap negro","Chelsea boots cognac"],
@@ -183,8 +182,7 @@ const DEFAULT = {
     chamarra:["Sin chamarra","Bomber negra","Chaqueta cuero negra","Blazer negro","Bomber gris","Blazer azul marino","Bomber azul marino","Blazer negro slim"],
   },
   casual:{
-    camiseta:["Camiseta blanca básica","Camiseta negra","Camiseta gris","Camiseta azul","Camiseta verde","Camiseta estampada","Polo blanco","Camiseta mostaza"],
-    camisa:["Camisa flanela cuadros","Overshirt mezclilla","Camisa hawaiana","Camisa lino beige","Camisa flanela gris","Overshirt verde","Camisa lino blanca","Camisa café lino"],
+    arriba:["Camiseta blanca básica","Camiseta negra","Camiseta gris","Camiseta azul","Camiseta verde","Camiseta estampada","Polo blanco","Camiseta mostaza","Camisa flanela cuadros","Overshirt mezclilla","Camisa hawaiana","Camisa lino beige","Camisa flanela gris","Overshirt verde","Camisa lino blanca","Camisa café lino"],
     pantalon:["Jeans azul clásico","Jeans negro","Jeans gris","Shorts beige","Shorts azul","Jogger gris","Cargo verde","Shorts negro"],
     tenis:["Tenis blancos","Tenis negros","Tenis grises","Converse blanco","Converse negro","Vans negros","Tenis coloridos","Vans gris"],
     formal:null,
@@ -194,8 +192,7 @@ const DEFAULT = {
 };
 
 const CATS=[
-  {key:'camiseta',icon:'👕',label:'Camiseta / Polo'},
-  {key:'camisa',icon:'👔',label:'Camisa'},
+  {key:'arriba',icon:'👕',label:'Parte de arriba'},
   {key:'pantalon',icon:'👖',label:'Pantalón / Jeans'},
   {key:'tenis',icon:'👟',label:'Tenis / Sneakers'},
   {key:'formal',icon:'👞',label:'Calzado formal'},
@@ -211,8 +208,8 @@ const OCC={
 
 let occActual='trabajo', editOcc='trabajo', count=1, prendas={};
 
-function load(){ const s=localStorage.getItem('op2'); prendas=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT)); }
-function save(){ localStorage.setItem('op2',JSON.stringify(prendas)); }
+function load(){ const s=localStorage.getItem('op3'); prendas=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT)); }
+function save(){ localStorage.setItem('op3',JSON.stringify(prendas)); }
 function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
 function setCSS(occ){ const c=OCC[occ]; document.documentElement.style.setProperty('--active-a',c.a); document.documentElement.style.setProperty('--active-b',c.b); }
 
