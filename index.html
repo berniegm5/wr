@@ -8,488 +8,122 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f8f6f1">
 <title>ATELIER</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Didact+Gothic&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Didact+Gothic&display=swap" rel="stylesheet">
 <style>
-
-/* ── RESET + BASE ──────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-–cream:   #f8f6f1;
-–ivory:   #f0ede5;
-–border:  #d8d4ca;
-–rule:    #c8c4ba;
-–ink:     #111009;
-–mid:     #7a7670;
-–light:   #b0ada6;
-–gold:    #9a8a6a;
-–safe-t:  env(safe-area-inset-top,  0px);
-–safe-b:  env(safe-area-inset-bottom, 0px);
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#f8f6f1;--ivory:#f0ede5;--border:#d8d4ca;--rule:#c8c4ba;
+  --ink:#111009;--mid:#7a7670;--light:#b0ada6;--gold:#9a8a6a;
+  --safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);
 }
+html{background:var(--cream)}
+body{min-height:100vh;background:var(--cream);color:var(--ink);font-family:'Didact Gothic',sans-serif;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
 
-html { height: 100%; background: var(–cream); }
-body {
-min-height: 100%;
-background: var(–cream);
-color: var(–ink);
-font-family: ‘Didact Gothic’, ‘Gill Sans’, sans-serif;
--webkit-tap-highlight-color: transparent;
-overflow-x: hidden;
-}
+/* HEADER */
+header{padding:calc(var(–safe-t) + 36px) 28px 0;text-align:center}
+.h-rule{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(–rule),transparent);margin-bottom:22px}
+.brand{font-family:‘Playfair Display’,serif;font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:var(–gold);margin-bottom:18px}
+.headline{font-family:‘Playfair Display’,serif;font-size:52px;font-weight:400;line-height:.95;color:var(–ink);margin-bottom:6px}
+.headline em{font-style:italic}
+.subhead{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(–light);margin-bottom:28px}
+.h-rule-v{width:1px;height:32px;background:linear-gradient(180deg,var(–rule),transparent);margin:0 auto}
 
-/* ── HEADER ────────────────────────────────────── */
-header {
-padding: calc(var(–safe-t) + 36px) 28px 0;
-text-align: center;
-position: relative;
-}
+/* OCASION */
+.sec-label{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(–light);text-align:center;padding:28px 28px 16px}
+.occ-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(–border);margin:0 28px;border:1px solid var(–border)}
+.occ-btn{background:var(–cream);border:none;padding:20px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:background .18s;-webkit-tap-highlight-color:transparent}
+.occ-btn.selected{background:var(–ink)}
+.occ-icon{font-size:20px}
+.occ-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(–mid);transition:color .18s}
+.occ-btn.selected .occ-label{color:var(–cream)}
 
-.header-rule {
-width: 100%;
-height: 1px;
-background: linear-gradient(90deg, transparent, var(–rule), transparent);
-margin-bottom: 22px;
-}
+.ornament{text-align:center;padding:24px 0 0;font-family:‘Playfair Display’,serif;font-size:18px;color:var(–border);letter-spacing:.3em}
 
-.brand {
-font-family: ‘Playfair Display’, ‘Didot’, ‘Big Caslon’, serif;
-font-size: 11px;
-font-weight: 400;
-letter-spacing: .5em;
-text-transform: uppercase;
-color: var(–gold);
-margin-bottom: 18px;
-}
+/* OUTFIT */
+.outfit-section{padding:0 28px 24px}
+.outfit-meta{display:flex;align-items:baseline;justify-content:space-between;padding:16px 0 14px;border-bottom:1px solid var(–border)}
+.outfit-counter{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(–light)}
+.outfit-title{font-family:‘Playfair Display’,serif;font-size:15px;font-style:italic;color:var(–gold)}
 
-.headline {
-font-family: ‘Playfair Display’, ‘Didot’, serif;
-font-size: 52px;
-font-weight: 400;
-line-height: .95;
-letter-spacing: -.01em;
-color: var(–ink);
-margin-bottom: 6px;
-}
+.prenda{display:flex;align-items:center;padding:11px 10px;gap:12px;border-bottom:1px solid var(–ivory);border-radius:8px;margin-bottom:2px;position:relative;overflow:hidden}
+.prenda:last-child{border-bottom:1px solid var(–border);margin-bottom:0}
+.prenda.na{opacity:.3}
 
-.headline em {
-font-style: italic;
-font-weight: 400;
-}
+.prenda-glow{position:absolute;left:0;top:0;bottom:0;width:60%;border-radius:inherit;pointer-events:none}
 
-.subhead {
-font-size: 11px;
-letter-spacing: .22em;
-text-transform: uppercase;
-color: var(–light);
-margin-bottom: 28px;
-}
+.prenda-box{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;font-size:22px}
+.prenda-body{flex:1;min-width:0;position:relative;z-index:1}
+.prenda-cat{font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(–light);margin-bottom:2px}
+.prenda-val{font-family:‘Playfair Display’,serif;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(–ink)}
+.prenda.na .prenda-val{font-style:italic;color:var(–light);font-family:‘Didact Gothic’,sans-serif;font-size:13px}
 
-.header-rule-bottom {
-width: 1px; height: 32px;
-background: linear-gradient(180deg, var(–rule), transparent);
-margin: 0 auto;
-}
+@keyframes slideIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── OCASIÓN SELECTOR ──────────────────────────── */
-.section-label {
-font-size: 9px;
-letter-spacing: .3em;
-text-transform: uppercase;
-color: var(–light);
-text-align: center;
-padding: 28px 28px 16px;
-}
+/* GENERAR */
+.gen-wrap{padding:20px 28px 0}
+.btn-gen{width:100%;background:var(–ink);color:var(–cream);border:none;padding:19px 24px;font-size:10px;letter-spacing:.38em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:14px;font-family:‘Didact Gothic’,sans-serif;-webkit-tap-highlight-color:transparent}
+.btn-gen:active{background:#2a2820}
+.gen-dice{font-size:18px}
+.gen-hint{text-align:center;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(–light);padding:12px 0 0}
 
-.occ-grid {
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-gap: 1px;
-background: var(–border);
-margin: 0 28px;
-border: 1px solid var(–border);
-}
+/* EDITOR */
+.mid-rule{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(–border),transparent);margin:28px 0 0}
+.edit-toggle-wrap{text-align:center;padding:18px 28px 0}
+.btn-edit-toggle{background:none;border:1px solid var(–border);color:var(–mid);padding:12px 28px;font-size:9px;letter-spacing:.3em;text-transform:uppercase;cursor:pointer;font-family:‘Didact Gothic’,sans-serif;width:100%;-webkit-tap-highlight-color:transparent}
+.btn-edit-toggle.open{background:var(–ivory);color:var(–ink);border-color:var(–rule)}
+.editor-panel{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.editor-panel.open{max-height:4000px}
+.editor-inner{padding:0 28px 32px}
+.edit-tabs{display:flex;border-bottom:1px solid var(–border);margin:20px 0 0}
+.edit-tab{flex:1;padding:12px 6px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;text-align:center;cursor:pointer;color:var(–light);border-bottom:1.5px solid transparent;transition:all .2s;font-family:‘Didact Gothic’,sans-serif}
+.edit-tab.active{color:var(–ink);border-bottom-color:var(–ink)}
+.edit-cat{margin-top:22px}
+.edit-cat-label{font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:var(–gold);margin-bottom:10px}
+.edit-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.edit-input{flex:1;background:var(–ivory);border:1px solid var(–border);padding:10px 13px;color:var(–ink);font-family:‘Playfair Display’,serif;font-size:14px;outline:none;border-radius:0;-webkit-appearance:none}
+.edit-input:focus{border-color:var(–ink)}
+.btn-del{width:34px;height:34px;background:none;border:1px solid var(–border);color:var(–light);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-del:active{background:#fde8e8;color:#900}
+.btn-add{width:100%;background:none;border:1px dashed var(–border);padding:10px;color:var(–light);font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;font-family:‘Didact Gothic’,sans-serif;margin-top:4px}
+.na-note{font-size:11px;font-style:italic;color:var(–light);padding:4px 0 8px;font-family:‘Playfair Display’,serif}
+.btn-save{width:100%;background:var(–ink);color:var(–cream);border:none;padding:18px;font-size:10px;letter-spacing:.36em;text-transform:uppercase;cursor:pointer;font-family:‘Didact Gothic’,sans-serif;margin-top:24px}
+.btn-save:active{background:#2a2820}
 
-.occ-btn {
-background: var(–cream);
-border: none;
-padding: 20px 8px;
-cursor: pointer;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 8px;
-transition: background .18s;
-position: relative;
-}
+.footer{padding:calc(24px + var(–safe-b)) 28px 0;text-align:center;border-top:1px solid var(–border);margin-top:28px}
+.footer p{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(–light);padding-bottom:24px}
 
-.occ-btn:active { background: var(–ivory); }
-
-.occ-btn.selected {
-background: var(–ink);
-}
-
-.occ-btn::after {
-content: ‘’;
-position: absolute;
-bottom: 0; left: 10%; right: 10%; height: 1px;
-background: var(–gold);
-transform: scaleX(0);
-transition: transform .25s;
-}
-.occ-btn.selected::after { transform: scaleX(1); }
-
-.occ-icon  { font-size: 20px; }
-.occ-label {
-font-size: 9px;
-letter-spacing: .22em;
-text-transform: uppercase;
-color: var(–mid);
-transition: color .18s;
-}
-.occ-btn.selected .occ-label { color: var(–cream); }
-.occ-btn.selected .occ-icon  { filter: none; }
-
-/* ── DIVIDER ───────────────────────────────────── */
-.ornament {
-text-align: center;
-padding: 24px 0 0;
-font-family: ‘Playfair Display’, serif;
-font-size: 18px;
-color: var(–border);
-letter-spacing: .3em;
-}
-
-/* ── OUTFIT CARD ───────────────────────────────── */
-.outfit-section {
-padding: 0 28px 24px;
-}
-
-.outfit-meta {
-display: flex;
-align-items: baseline;
-justify-content: space-between;
-padding: 16px 0 14px;
-border-bottom: 1px solid var(–border);
-margin-bottom: 0;
-}
-
-.outfit-counter {
-font-size: 10px;
-letter-spacing: .2em;
-text-transform: uppercase;
-color: var(–light);
-}
-
-.outfit-title {
-font-family: ‘Playfair Display’, serif;
-font-size: 15px;
-font-style: italic;
-color: var(–gold);
-}
-
-/* prenda rows */
-.prenda {
-display: flex;
-align-items: center;
-padding: 13px 14px 13px 0;
-gap: 14px;
-animation: slideIn .3s ease both;
-border-bottom: 1px solid var(–ivory);
-position: relative;
-border-radius: 8px;
-overflow: hidden;
-}
-.prenda::before {
-content: ‘’;
-position: absolute;
-inset: 0;
-background: linear-gradient(90deg, var(–row-color, transparent) 0%, transparent 70%);
-opacity: .18;
-pointer-events: none;
-border-radius: inherit;
-}
-.prenda:last-child { border-bottom: 1px solid var(–border); }
-.prenda.na { opacity: .3; }
-
-@keyframes slideIn {
-from { opacity: 0; transform: translateY(6px); }
-to   { opacity: 1; transform: translateY(0); }
-}
-
-.prenda-icon-wrap { width: 36px; height: 36px; display:flex; align-items:center; justify-content:center; flex-shrink:0; position:relative; z-index:1; }
-.prenda-icon-wrap svg { width: 28px; height: 28px; }
-.prenda-color-dot { display:none; }
-.prenda-color-dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; border: 1.5px solid rgba(0,0,0,.12); box-shadow: 0 1px 4px rgba(0,0,0,.18); }
-.prenda-body { flex: 1; min-width: 0; }
-.prenda-cat {
-font-size: 8px;
-letter-spacing: .24em;
-text-transform: uppercase;
-color: var(–light);
-margin-bottom: 2px;
-}
-.prenda-val {
-font-family: ‘Playfair Display’, serif;
-font-size: 16px;
-font-weight: 400;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-color: var(–ink);
-}
-.prenda.na .prenda-val {
-font-style: italic;
-color: var(–light);
-font-family: ‘Didact Gothic’, sans-serif;
-font-size: 13px;
-}
-
-/* ── GENERATE BUTTON ───────────────────────────── */
-.gen-wrap {
-padding: 20px 28px 0;
-}
-
-.btn-gen {
-width: 100%;
-background: var(–ink);
-color: var(–cream);
-border: none;
-padding: 19px 24px;
-font-size: 10px;
-letter-spacing: .38em;
-text-transform: uppercase;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 14px;
-transition: background .18s, transform .15s;
-font-family: ‘Didact Gothic’, sans-serif;
-}
-.btn-gen:active { background: #2a2820; transform: scale(.99); }
-
-.btn-gen .dice { font-size: 16px; }
-.btn-gen.spin .dice { animation: rolldie .4s ease; }
-@keyframes rolldie {
-0%   { transform: rotate(0)      scale(1);   }
-50%  { transform: rotate(180deg) scale(1.4); }
-100% { transform: rotate(360deg) scale(1);   }
-}
-
-.gen-hint {
-text-align: center;
-font-size: 9px;
-letter-spacing: .16em;
-text-transform: uppercase;
-color: var(–light);
-padding: 12px 0 0;
-}
-
-/* ── RULE + EDIT ───────────────────────────────── */
-.mid-rule {
-width: 100%;
-height: 1px;
-background: linear-gradient(90deg, transparent, var(–border), transparent);
-margin: 28px 0 0;
-}
-
-.edit-toggle-wrap {
-text-align: center;
-padding: 18px 28px 0;
-}
-
-.btn-edit-toggle {
-background: none;
-border: 1px solid var(–border);
-color: var(–mid);
-padding: 12px 28px;
-font-size: 9px;
-letter-spacing: .3em;
-text-transform: uppercase;
-cursor: pointer;
-font-family: ‘Didact Gothic’, sans-serif;
-transition: all .2s;
-width: 100%;
-}
-.btn-edit-toggle:active { background: var(–ivory); }
-.btn-edit-toggle.open   { background: var(–ivory); color: var(–ink); border-color: var(–rule); }
-
-/* ── EDITOR PANEL ──────────────────────────────── */
-.editor-panel {
-max-height: 0;
-overflow: hidden;
-transition: max-height .45s cubic-bezier(.77,0,.18,1);
-}
-.editor-panel.open { max-height: 2400px; }
-
-.editor-inner { padding: 0 28px 32px; }
-
-.edit-occ-tabs {
-display: flex;
-border-bottom: 1px solid var(–border);
-margin: 20px 0 0;
-}
-.edit-tab {
-flex: 1;
-padding: 12px 6px;
-font-size: 9px;
-letter-spacing: .18em;
-text-transform: uppercase;
-text-align: center;
-cursor: pointer;
-color: var(–light);
-border-bottom: 1.5px solid transparent;
-transition: all .2s;
-font-family: ‘Didact Gothic’, sans-serif;
-}
-.edit-tab.active { color: var(–ink); border-bottom-color: var(–ink); }
-
-.edit-cat { margin-top: 22px; }
-.edit-cat-label {
-font-size: 8px;
-letter-spacing: .26em;
-text-transform: uppercase;
-color: var(–gold);
-margin-bottom: 10px;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-
-.edit-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
-
-.edit-input {
-flex: 1;
-background: var(–ivory);
-border: 1px solid var(–border);
-padding: 10px 13px;
-color: var(–ink);
-font-family: ‘Playfair Display’, serif;
-font-size: 14px;
-outline: none;
-border-radius: 0;
-transition: border-color .2s;
--webkit-appearance: none;
-}
-.edit-input:focus { border-color: var(–ink); }
-
-.btn-del {
-width: 34px; height: 34px;
-background: none;
-border: 1px solid var(–border);
-color: var(–light);
-font-size: 12px;
-cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-flex-shrink: 0;
-transition: all .15s;
-}
-.btn-del:active { background: #fde8e8; border-color: #d88; color: #900; }
-
-.btn-add-item {
-width: 100%;
-background: none;
-border: 1px dashed var(–border);
-padding: 10px;
-color: var(–light);
-font-size: 9px;
-letter-spacing: .2em;
-text-transform: uppercase;
-cursor: pointer;
-font-family: ‘Didact Gothic’, sans-serif;
-transition: all .2s;
-margin-top: 4px;
-}
-.btn-add-item:active { background: var(–ivory); color: var(–ink); border-color: var(–rule); }
-
-.na-note {
-font-size: 11px;
-font-style: italic;
-color: var(–light);
-padding: 4px 0 8px;
-font-family: ‘Playfair Display’, serif;
-}
-
-.btn-save {
-width: 100%;
-background: var(–ink);
-color: var(–cream);
-border: none;
-padding: 18px;
-font-size: 10px;
-letter-spacing: .36em;
-text-transform: uppercase;
-cursor: pointer;
-font-family: ‘Didact Gothic’, sans-serif;
-margin-top: 24px;
-transition: background .18s;
-}
-.btn-save:active { background: #2a2820; }
-
-/* ── FOOTER ────────────────────────────────────── */
-.footer {
-padding: calc(24px + var(–safe-b)) 28px 0;
-text-align: center;
-border-top: 1px solid var(–border);
-margin-top: 28px;
-}
-.footer p {
-font-size: 9px;
-letter-spacing: .22em;
-text-transform: uppercase;
-color: var(–light);
-padding-bottom: 24px;
-}
-
-/* ── TOAST ─────────────────────────────────────── */
-.toast {
-position: fixed;
-bottom: 36px; left: 50%;
-transform: translateX(-50%) translateY(12px);
-background: var(–ink); color: var(–cream);
-padding: 10px 24px;
-font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
-font-family: ‘Didact Gothic’, sans-serif;
-opacity: 0; transition: all .3s;
-pointer-events: none; white-space: nowrap; z-index: 9999;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
+.toast{position:fixed;bottom:36px;left:50%;transform:translateX(-50%) translateY(12px);background:var(–ink);color:var(–cream);padding:10px 24px;font-size:9px;letter-spacing:.26em;text-transform:uppercase;font-family:‘Didact Gothic’,sans-serif;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:9999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
+
 </head>
 <body>
 
-<!-- ── HEADER ── -->
-
 <header>
-  <div class="header-rule"></div>
+  <div class="h-rule"></div>
   <p class="brand">Atelier Personnel</p>
   <h1 class="headline">Mon<br><em>Outfit</em></h1>
-  <p class="subhead">Collection Privée</p>
-  <div class="header-rule-bottom"></div>
+  <p class="subhead">Collection Priv&#233;e</p>
+  <div class="h-rule-v"></div>
 </header>
 
-<!-- ── OCASIÓN ── -->
-
-<p class="section-label">Selecciona la ocasión</p>
+<p class="sec-label">Selecciona la ocasi&#243;n</p>
 <div class="occ-grid">
-  <button class="occ-btn selected" data-occ="trabajo" onclick="setOcc('trabajo',this)">
-    <span class="occ-icon">💼</span>
+  <button class="occ-btn selected" onclick="setOcc('trabajo',this)">
+    <span class="occ-icon">&#128188;</span>
     <span class="occ-label">Trabajo</span>
   </button>
-  <button class="occ-btn" data-occ="cita" onclick="setOcc('cita',this)">
-    <span class="occ-icon">🌙</span>
+  <button class="occ-btn" onclick="setOcc('cita',this)">
+    <span class="occ-icon">&#127769;</span>
     <span class="occ-label">Cita</span>
   </button>
-  <button class="occ-btn" data-occ="casual" onclick="setOcc('casual',this)">
-    <span class="occ-icon">☀️</span>
+  <button class="occ-btn" onclick="setOcc('casual',this)">
+    <span class="occ-icon">&#9728;</span>
     <span class="occ-label">Casual</span>
   </button>
 </div>
 
-<div class="ornament">— ✦ —</div>
-
-<!-- ── OUTFIT ── -->
+<div class="ornament">&#8212; &#10022; &#8212;</div>
 
 <div class="outfit-section">
   <div class="outfit-meta">
@@ -499,329 +133,386 @@ pointer-events: none; white-space: nowrap; z-index: 9999;
   <div id="prendasList"></div>
 </div>
 
-<!-- ── GENERAR ── -->
-
 <div class="gen-wrap">
   <button class="btn-gen" id="genBtn" onclick="generar()">
-    <span class="dice">✦</span>
+    <span class="gen-dice">&#10022;</span>
     <span>Nouveau look</span>
   </button>
-  <p class="gen-hint">Toca para generar una nueva combinación</p>
+  <p class="gen-hint">Toca para generar una nueva combinaci&#243;n</p>
 </div>
-
-<!-- ── EDITAR ── -->
 
 <div class="mid-rule"></div>
 <div class="edit-toggle-wrap">
-  <button class="btn-edit-toggle" id="editToggleBtn" onclick="toggleEditor()">
-    Editar mis prendas
-  </button>
+  <button class="btn-edit-toggle" id="editToggleBtn" onclick="toggleEditor()">Editar mis prendas</button>
 </div>
-
 <div class="editor-panel" id="editorPanel">
   <div class="editor-inner">
-    <div class="edit-occ-tabs">
-      <div class="edit-tab active" onclick="setEditOcc('trabajo')">💼 Trabajo</div>
-      <div class="edit-tab" onclick="setEditOcc('cita')">🌙 Cita</div>
-      <div class="edit-tab" onclick="setEditOcc('casual')">☀️ Casual</div>
+    <div class="edit-tabs">
+      <div class="edit-tab active" onclick="setEditOcc('trabajo')">&#128188; Trabajo</div>
+      <div class="edit-tab" onclick="setEditOcc('cita')">&#127769; Cita</div>
+      <div class="edit-tab" onclick="setEditOcc('casual')">&#9728; Casual</div>
     </div>
     <div id="editBody"></div>
-    <button class="btn-save" onclick="guardar()">Guardar</button>
+    <button class="btn-save" onclick="guardar()">Guardar cambios</button>
   </div>
 </div>
 
-<!-- ── FOOTER ── -->
-
-<div class="footer">
-  <p>Generador personal · Édition privée</p>
-</div>
-
+<div class="footer"><p>Generador personal &middot; &Eacute;dition priv&#233;e</p></div>
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════
-// DATOS
-// ═══════════════════════════════════════════════
-const DEFAULT = {
-  trabajo:{
-    arriba:["Polo blanco liso","Polo azul marino","Polo gris claro","Camiseta negra básica","Polo verde olivo","Polo burdeos","Camiseta blanca cuello V","Polo beige","Oxford blanca","Oxford azul claro","Camisa cuadros grises","Camisa azul marino","Camisa blanca slim","Camisa beige lino","Oxford celeste","Oxford rayas finas"],
-    pantalon:["Chino beige","Chino negro","Chino gris","Chino azul marino","Pantalón dress negro","Pantalón dress gris","Chino marrón","Pantalón dress azul"],
-    calzado:["Derby negro","Oxford café","Derby marrón","Monk strap negro","Oxford cognac","Derby azul","Mocasín negro","Derby gris"],
-    chamarra:["Sin chamarra","Blazer gris","Blazer azul marino","Blazer negro","Blazer beige","Blazer cuadros","Blazer camel","Blazer burdeos"],
+var DEFAULT = {
+  trabajo: {
+    arriba: ["Polo blanco liso","Polo azul marino","Polo gris claro","Camiseta negra basica","Polo verde olivo","Polo burdeos","Camiseta blanca cuello V","Polo beige","Oxford blanca","Oxford azul claro","Camisa cuadros grises","Camisa azul marino","Camisa blanca slim","Camisa beige lino","Oxford celeste","Oxford rayas finas"],
+    pantalon: ["Chino beige","Chino negro","Chino gris","Chino azul marino","Pantalon dress negro","Pantalon dress gris","Chino marron","Pantalon dress azul"],
+    calzado: ["Derby negro","Oxford cafe","Derby marron","Monk strap negro","Oxford cognac","Derby azul","Mocasin negro","Derby gris"],
+    chamarra: ["Sin chamarra","Blazer gris","Blazer azul marino","Blazer negro","Blazer beige","Blazer cuadros","Blazer camel","Blazer burdeos"]
   },
-  cita:{
-    arriba:["Camiseta negra slim","Camiseta blanca básica","Camiseta gris oscuro","Camiseta burdeos","Polo negro","Camiseta vino","Camisa negra","Camisa blanca slim","Camisa azul oscuro","Camisa gris marengo","Camisa vino","Oxford blanca","Camisa burdeos","Camisa gris carbón"],
-    pantalon:["Jeans negro slim","Chino negro","Jeans azul oscuro slim","Pantalón gris oscuro","Jeans gris","Chino marrón oscuro","Jeans negro skinny","Jeans azul índigo"],
-    calzado:["Derby negro","Chelsea boots negro","Oxford café oscuro","Chelsea boots café","Monk strap negro","Chelsea boots cognac","Sneakers blancos limpios","Sneakers negros","Sneakers gris claro","Sneakers cuero blanco"],
-    chamarra:["Sin chamarra","Bomber negra","Chaqueta cuero negra","Blazer negro","Bomber gris","Blazer azul marino","Bomber azul marino","Blazer negro slim"],
+  cita: {
+    arriba: ["Camiseta negra slim","Camiseta blanca basica","Camiseta gris oscuro","Camiseta burdeos","Polo negro","Camiseta vino","Camisa negra","Camisa blanca slim","Camisa azul oscuro","Camisa gris marengo","Oxford blanca","Camisa burdeos","Camisa gris carbon"],
+    pantalon: ["Jeans negro slim","Chino negro","Jeans azul oscuro slim","Pantalon gris oscuro","Jeans gris","Chino marron oscuro","Jeans negro skinny","Jeans azul indigo"],
+    calzado: ["Derby negro","Chelsea boots negro","Oxford cafe oscuro","Chelsea boots cafe","Monk strap negro","Chelsea boots cognac","Sneakers blancos","Sneakers negros","Sneakers gris claro","Sneakers cuero blanco"],
+    chamarra: ["Sin chamarra","Bomber negra","Chaqueta cuero negra","Blazer negro","Bomber gris","Blazer azul marino","Bomber azul marino","Blazer negro slim"]
   },
-  casual:{
-    arriba:["Camiseta blanca básica","Camiseta negra","Camiseta gris","Camiseta azul","Camiseta verde","Camiseta estampada","Polo blanco","Camiseta mostaza","Camisa flanela cuadros","Overshirt mezclilla","Camisa hawaiana","Camisa lino beige","Camisa flanela gris","Overshirt verde","Camisa lino blanca","Camisa café lino"],
-    pantalon:["Jeans azul clásico","Jeans negro","Jeans gris","Shorts beige","Shorts azul","Jogger gris","Cargo verde","Shorts negro"],
-    calzado:["Tenis blancos","Tenis negros","Tenis grises","Converse blanco","Converse negro","Vans negros","Vans gris","Huaraches cuero","Sandalias café","Slip-on negro","Mocasín casual beige","Espadrilles beige"],
-    chamarra:["Sin chamarra","Hoodie gris","Hoodie negro","Bomber verde","Chaqueta mezclilla","Overshirt flanela","Hoodie blanco","Bomber beige"],
+  casual: {
+    arriba: ["Camiseta blanca basica","Camiseta negra","Camiseta gris","Camiseta azul","Camiseta verde","Camiseta estampada","Polo blanco","Camiseta mostaza","Camisa flanela cuadros","Overshirt mezclilla","Camisa hawaiana","Camisa lino beige","Camisa flanela gris","Overshirt verde","Camisa lino blanca","Camisa cafe lino"],
+    pantalon: ["Jeans azul clasico","Jeans negro","Jeans gris","Shorts beige","Shorts azul","Jogger gris","Cargo verde","Shorts negro"],
+    calzado: ["Tenis blancos","Tenis negros","Tenis grises","Converse blanco","Converse negro","Vans negros","Vans gris","Huaraches cuero","Sandalias cafe","Slip-on negro","Mocasin casual beige","Espadrilles beige"],
+    chamarra: ["Sin chamarra","Hoodie gris","Hoodie negro","Bomber verde","Chaqueta mezclilla","Overshirt flanela","Hoodie blanco","Bomber beige"]
   }
 };
 
-// ── ICONOS SVG POR TIPO ──
-const CAT_SVGS = {
-  arriba:   '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="22" width="28" height="34" rx="2" stroke="COLOR" stroke-width="2.5"/><path d="M18 22 L8 28 L8 36 L18 33" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M46 22 L56 28 L56 36 L46 33" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 22 Q32 28 38 22" stroke="COLOR" stroke-width="2.5"/></svg>',
-  pantalon: '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="10" width="36" height="8" rx="1" stroke="COLOR" stroke-width="2.5"/><path d="M14 18 L14 54 Q14 57 20 57 L26 57 Q30 57 32 54 L32 18" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 18 L50 54 Q50 57 44 57 L38 57 Q34 57 32 54 L32 18" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/></svg>',
-  calzado:  '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 44 L10 32 Q16 24 26 23 L44 22 Q54 22 58 34 L58 44" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M6 44 L6 50 Q6 56 14 56 L54 56 Q60 56 60 50 L60 44 Z" stroke="COLOR" stroke-width="2.5"/><path d="M24 24 L22 40" stroke="COLOR" stroke-width="2"/><line x1="26" y1="28" x2="38" y2="27" stroke="COLOR" stroke-width="1.8"/><line x1="25" y1="34" x2="37" y2="33" stroke="COLOR" stroke-width="1.8"/></svg>',
-  chamarra: '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="20" width="28" height="38" rx="2" stroke="COLOR" stroke-width="2.5"/><path d="M18 20 L6 26 L6 52 L18 50" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M46 20 L58 26 L58 52 L46 50" stroke="COLOR" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 20 L32 32 L26 20" stroke="COLOR" stroke-width="2" stroke-linejoin="round"/><path d="M46 20 L32 32 L38 20" stroke="COLOR" stroke-width="2" stroke-linejoin="round"/><line x1="32" y1="32" x2="32" y2="58" stroke="COLOR" stroke-width="1.5" stroke-dasharray="3 2"/></svg>',
-};
-
-// ── DETECCIÓN DE COLOR AUTOMÁTICA ──
-const COLOR_MAP = [
-  {words:['blanco','blanca','white','cream','crema'],        color:'#f5f5f0'},
-  {words:['negro','negra','black','oscuro','oscura'],        color:'#1a1a1a'},
-  {words:['gris','gray','grey','marengo','charcoal','plomo'],color:'#6b6b6b'},
-  {words:['azul marino','navy','marino'],                    color:'#1a2f5a'},
-  {words:['azul','blue','celeste','indigo','índigo'],        color:'#3a6ea8'},
-  {words:['rojo','red'],                                     color:'#b02020'},
-  {words:['burdeos','burdeos','bordo','vino','granate'],     color:'#6a1a2a'},
-  {words:['verde','green','olivo','oliva','militar'],        color:'#3a6a3a'},
-  {words:['beige','arena','crudo','lino','camel','cognac'],  color:'#c8a97a'},
-  {words:['marrón','marron','café','brown','chocolate'],     color:'#6a4a2a'},
-  {words:['mostaza','amarillo','yellow'],                    color:'#c8a020'},
-  {words:['naranja','orange'],                               color:'#c86020'},
-  {words:['morado','purple','lila','lavanda'],               color:'#6a3a8a'},
-  {words:['rosa','pink'],                                    color:'#d4809a'},
-  {words:['cuadros','franela','rayas','estampado','hawaiana'],color:'#8a7a6a'},
+var CATS = [
+  {key:"arriba",   emoji:"&#128085;", label:"Parte de arriba"},
+  {key:"pantalon", emoji:"&#128086;", label:"Pantal&#243;n"},
+  {key:"calzado",  emoji:"&#128094;", label:"Calzado"},
+  {key:"chamarra", emoji:"&#129381;", label:"Chamarra"}
 ];
 
-function detectColor(name) {
-  const lower = name.toLowerCase();
-  for (const entry of COLOR_MAP) {
-    for (const w of entry.words) {
-      if (lower.includes(w)) return entry.color;
-    }
+var TITLES = {
+  trabajo: ["Pour le bureau","Style professionnel","Au travail","R&#233;union du jour"],
+  cita:    ["Pour ce soir","Une nuit sp&#233;ciale","Soir&#233;e &#233;l&#233;gante","Rendez-vous"],
+  casual:  ["L'essentiel du jour","Week-end style","D&#233;contract&#233; chic","Simplicit&#233;"]
+};
+
+var COLOR_MAP = [
+  {words:["blanco","blanca","white","cream","crema"],     color:"#d4cfc8"},
+  {words:["negro","negra","black","oscuro","oscura"],     color:"#2a2520"},
+  {words:["gris","gray","grey","marengo","carbon"],       color:"#7a7670"},
+  {words:["azul marino","navy","marino"],                 color:"#1a2f5a"},
+  {words:["azul","blue","celeste","indigo"],              color:"#3a6ea8"},
+  {words:["rojo","red"],                                  color:"#b02020"},
+  {words:["burdeos","bordo","vino","granate"],            color:"#6a1a2a"},
+  {words:["verde","green","olivo","oliva","militar"],     color:"#3a6a3a"},
+  {words:["beige","arena","crudo","lino","camel","cognac"],color:"#c8a97a"},
+  {words:["marron","marron","cafe","brown","chocolate"],  color:"#7a5a3a"},
+  {words:["mostaza","amarillo"],                          color:"#c8a020"},
+  {words:["naranja","orange"],                            color:"#c86020"},
+  {words:["morado","purple","lila"],                      color:"#6a3a8a"},
+  {words:["rosa","pink"],                                 color:"#d4809a"},
+  {words:["cuadros","flanela","rayas","estampado"],       color:"#8a7a6a"}
+];
+
+var COLOR_GROUPS = {
+  azul_marino: ["azul marino","navy","marino","indigo","azul oscuro"],
+  negro:       ["negro","negra","black","oscuro","oscura","carbon","marengo"],
+  gris:        ["gris","gray","grey","plomo"],
+  blanco:      ["blanco","blanca","white","crema","cream"],
+  beige:       ["beige","arena","crudo","lino","camel","champagne"],
+  cafe:        ["cafe","marron","brown","cognac","chocolate"],
+  verde:       ["verde","green","olivo","oliva","militar","salvia"],
+  vino:        ["vino","burdeos","bordo","granate"],
+  azul:        ["azul","blue","celeste"]
+};
+
+var GOOD_COMBOS = [
+  ["azul_marino","beige"],["azul_marino","cafe"],["azul_marino","verde"],
+  ["cafe","beige"],["cafe","verde"],["verde","beige"],
+  ["negro","gris"],["negro","beige"],["negro","cafe"],
+  ["gris","cafe"],["gris","beige"],
+  ["blanco","azul_marino"],["blanco","negro"],
+  ["vino","cafe"],["azul","beige"]
+];
+
+var occ = "trabajo";
+var editOcc = "trabajo";
+var count = 1;
+var prendas = {};
+var editorOpen = false;
+
+function loadData() {
+  try {
+    var s = localStorage.getItem("atelier_v5");
+    prendas = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT));
+  } catch(e) {
+    prendas = JSON.parse(JSON.stringify(DEFAULT));
   }
-  return '#a0a0a0';
 }
 
-// ── LÓGICA DE COMBINACIONES ──
-// Basado en las paletas de tu imagen: qué grupos de color combinan bien
-const COLOR_GROUPS = {
-  azul_marino: ['azul marino','navy','marino','índigo','indigo','azul oscuro'],
-  azul_gris:   ['azul gris','azul claro','celeste','azul petróleo','petróleo'],
-  negro:       ['negro','negra','black','oscuro','oscura','carbón','carbon','charcoal','marengo'],
-  gris:        ['gris','gray','grey','plomo'],
-  blanco:      ['blanco','blanca','white','crema','cream','ivory'],
-  beige:       ['beige','arena','crudo','lino','camel','champagne'],
-  cafe:        ['café','cafe','marrón','marron','brown','cognac','chocolate','mocha'],
-  verde:       ['verde','green','olivo','oliva','militar','salvia','sage'],
-  vino:        ['vino','burdeos','bordo','granate','maroon','burdeos'],
-  caramelo:    ['caramelo','caramel','naranja','mostaza','teal'],
-};
+function saveData() {
+  try { localStorage.setItem("atelier_v5", JSON.stringify(prendas)); } catch(e) {}
+}
 
-// Pares de grupos que combinan bien (de tu imagen)
-const GOOD_COMBOS = [
-  ['azul_marino','beige'],   // Azul marino y beige ✓
-  ['azul_marino','cafe'],    // Azul y khaki ✓
-  ['azul_marino','verde'],   // Azul y verde ✓
-  ['cafe','beige'],          // Café y beige ✓
-  ['cafe','verde'],          // Café y verde ✓
-  ['verde','beige'],         // Verde y beige ✓
-  ['negro','gris'],          // Negro y gris ✓
-  ['negro','beige'],         // Negro y beige ✓
-  ['negro','cafe'],          // Negro y café ✓
-  ['gris','cafe'],           // Gris y marrón ✓
-  ['gris','beige'],          // Azul gris y beige ✓
-  ['blanco','azul_marino'],  // Blanco y azul ✓
-  ['blanco','negro'],        // Blanco y negro ✓
-  ['vino','cafe'],           // Vino y marrón ✓
-  ['caramelo','beige'],      // Caramelo y beige ✓
-  ['azul_gris','beige'],     // Azul gris y beige ✓
-  ['verde','cafe'],          // Verde salvia y café ✓
-];
+function rand(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
-function getColorGroup(name) {
-  const lower = name.toLowerCase();
-  for (const [group, words] of Object.entries(COLOR_GROUPS)) {
-    if (words.some(w => lower.includes(w))) return group;
+function detectColor(name) {
+  var lower = name.toLowerCase();
+  for (var i = 0; i < COLOR_MAP.length; i++) {
+    var entry = COLOR_MAP[i];
+    for (var j = 0; j < entry.words.length; j++) {
+      if (lower.indexOf(entry.words[j]) !== -1) return entry.color;
+    }
+  }
+  return "#a0a0a0";
+}
+
+function getGroup(name) {
+  var lower = name.toLowerCase();
+  var keys = Object.keys(COLOR_GROUPS);
+  for (var i = 0; i < keys.length; i++) {
+    var words = COLOR_GROUPS[keys[i]];
+    for (var j = 0; j < words.length; j++) {
+      if (lower.indexOf(words[j]) !== -1) return keys[i];
+    }
   }
   return null;
 }
 
-function colorsMatch(name1, name2) {
-  const g1 = getColorGroup(name1);
-  const g2 = getColorGroup(name2);
-  if (!g1 || !g2 || g1 === g2) return true; // si no detecta, deja pasar
-  return GOOD_COMBOS.some(([a,b]) => (a===g1&&b===g2)||(a===g2&&b===g1));
+function colorsMatch(a, b) {
+  var g1 = getGroup(a);
+  var g2 = getGroup(b);
+  if (!g1 || !g2 || g1 === g2) return true;
+  for (var i = 0; i < GOOD_COMBOS.length; i++) {
+    var combo = GOOD_COMBOS[i];
+    if ((combo[0]===g1 && combo[1]===g2) || (combo[0]===g2 && combo[1]===g1)) return true;
+  }
+  return false;
 }
 
 function randCompatible(opts, anchors) {
   if (!opts || !opts.length) return null;
-  // Try up to 12 times to find a color-compatible option
-  for (let i = 0; i < 12; i++) {
-    const candidate = opts[Math.floor(Math.random() * opts.length)];
-    const compatible = anchors.every(a => colorsMatch(candidate, a));
-    if (compatible) return candidate;
+  for (var i = 0; i < 12; i++) {
+    var candidate = opts[Math.floor(Math.random() * opts.length)];
+    var ok = true;
+    for (var j = 0; j < anchors.length; j++) {
+      if (!colorsMatch(candidate, anchors[j])) { ok = false; break; }
+    }
+    if (ok) return candidate;
   }
-  // fallback: just random
-  return opts[Math.floor(Math.random() * opts.length)];
+  return rand(opts);
 }
 
-const CATS = [
-  {key:'arriba',   icon:'👕', label:'Parte de arriba'},
-  {key:'pantalon', icon:'👖', label:'Pantalón'},
-  {key:'calzado',  icon:'👞', label:'Calzado'},
-  {key:'chamarra', icon:'🧥', label:'Chamarra'},
-];
+function hexToRgba(hex, alpha) {
+  var r = parseInt(hex.slice(1,3),16);
+  var g = parseInt(hex.slice(3,5),16);
+  var b = parseInt(hex.slice(5,7),16);
+  return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+}
 
-const TITLES = {
-  trabajo:['Pour le bureau','Style professionnel','Au travail','Réunion du jour'],
-  cita:   ['Pour ce soir','Une nuit spéciale','Soirée élégante','Rendez-vous'],
-  casual: ["L'essentiel du jour",'Week-end style','Décontracté chic','Simplicité'],
-};
-
-let occ='trabajo', editOcc='trabajo', count=1, prendas={};
-
-function load(){ const s=localStorage.getItem('atelier_v1'); prendas=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT)); }
-function save(){ localStorage.setItem('atelier_v1',JSON.stringify(prendas)); }
-function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
-
-// ── OCASIÓN ──
-function setOcc(o, btn){
+function setOcc(o, btn) {
   occ = o;
-  document.querySelectorAll('.occ-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
+  var btns = document.querySelectorAll(".occ-btn");
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove("selected");
+  btn.classList.add("selected");
   generar(false);
 }
 
-// ── GENERAR ──
-function generar(animate=true){
-  if(animate){
-    const b=document.getElementById('genBtn');
-    b.classList.add('spin');
-    setTimeout(()=>b.classList.remove('spin'),420);
+function generar(animate) {
+  if (animate === undefined) animate = true;
+  if (animate) {
     count++;
+    var btn = document.getElementById("genBtn");
+    var dice = btn.querySelector(".gen-dice");
+    dice.style.transform = "rotate(360deg) scale(1.3)";
+    setTimeout(function() { dice.style.transform = ""; }, 400);
   }
-  document.getElementById('outfitNum').textContent = '#'+count;
-  document.getElementById('outfitTitle').textContent = rand(TITLES[occ]);
 
-  const list=document.getElementById('prendasList');
-  list.innerHTML='';
-  const data=prendas[occ];
+  document.getElementById("outfitNum").textContent = "#" + count;
+  var titles = TITLES[occ];
+  document.getElementById("outfitTitle").innerHTML = titles[Math.floor(Math.random() * titles.length)];
 
-  // Pick arriba first as color anchor
-  const arribaOpts = data['arriba'];
-  const arribaVal = arribaOpts && arribaOpts.length ? rand(arribaOpts) : null;
-  const chosen = {};
-  if (arribaVal) chosen['arriba'] = arribaVal;
+  var list = document.getElementById("prendasList");
+  list.innerHTML = "";
+  var data = prendas[occ];
+  var chosen = [];
+  var arribaOpts = data["arriba"];
+  var arribaVal = (arribaOpts && arribaOpts.length) ? rand(arribaOpts) : null;
+  if (arribaVal) chosen.push(arribaVal);
 
-  CATS.forEach((cat,i)=>{
-    const opts = data[cat.key];
-    const row = document.createElement('div');
-    row.className = 'prenda' + ((!opts||!opts.length) ? ' na' : '');
-    row.style.animationDelay = (i*50)+'ms';
+  for (var i = 0; i < CATS.length; i++) {
+    var cat = CATS[i];
+    var opts = data[cat.key];
+    var val;
 
-    let val;
     if (!opts || !opts.length) {
-      val = 'No aplica';
-    } else if (cat.key === 'arriba') {
+      val = "No aplica";
+    } else if (cat.key === "arriba") {
       val = arribaVal || rand(opts);
     } else {
-      // pick color-compatible with already chosen pieces
-      const anchors = Object.values(chosen);
-      val = randCompatible(opts, anchors);
+      val = randCompatible(opts, chosen);
+      chosen.push(val);
     }
-    chosen[cat.key] = val;
 
-    const color = detectColor(val);
-    row.style.setProperty('--row-color', color);
-    const svgRaw = (CAT_SVGS[cat.key] || '').split('COLOR').join(color);
-    const rowHtml = '<div class="prenda-icon-wrap" style="background:' + color + '15;border:1.5px solid ' + color + '30;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0">' + svgRaw + '</div><div class="prenda-body"><div class="prenda-cat">' + cat.label + '</div><div class="prenda-val">' + val + '</div></div>';
-    row.innerHTML = rowHtml;
+    var color = detectColor(val);
+    var row = document.createElement("div");
+    row.className = "prenda" + ((!opts || !opts.length) ? " na" : "");
+    row.style.animationDelay = (i * 55) + "ms";
+    row.style.animation = "slideIn .3s ease " + (i * 55) + "ms both";
+
+    var glow = document.createElement("div");
+    glow.className = "prenda-glow";
+    glow.style.background = "linear-gradient(90deg, " + hexToRgba(color, 0.22) + " 0%, transparent 100%)";
+
+    var box = document.createElement("div");
+    box.className = "prenda-box";
+    box.style.background = hexToRgba(color, 0.15);
+    box.style.border = "1.5px solid " + hexToRgba(color, 0.4);
+    box.innerHTML = cat.emoji;
+
+    var body = document.createElement("div");
+    body.className = "prenda-body";
+    body.innerHTML = '<div class="prenda-cat">' + cat.label + '</div><div class="prenda-val">' + val + '</div>';
+
+    row.appendChild(glow);
+    row.appendChild(box);
+    row.appendChild(body);
     list.appendChild(row);
-  });
+  }
 }
 
-// ── EDITOR ──
-let editorOpen=false;
-function toggleEditor(){
-  editorOpen=!editorOpen;
-  document.getElementById('editorPanel').classList.toggle('open',editorOpen);
-  document.getElementById('editToggleBtn').classList.toggle('open',editorOpen);
-  document.getElementById('editToggleBtn').textContent = editorOpen ? 'Cerrar editor' : 'Editar mis prendas';
-  if(editorOpen){ editOcc=occ; syncEditTabs(); renderEditor(); setTimeout(()=>{ document.getElementById('editorPanel').scrollIntoView({behavior:'smooth',block:'start'}); },100); }
+function toggleEditor() {
+  editorOpen = !editorOpen;
+  document.getElementById("editorPanel").classList.toggle("open", editorOpen);
+  var btn = document.getElementById("editToggleBtn");
+  btn.classList.toggle("open", editorOpen);
+  btn.textContent = editorOpen ? "Cerrar editor" : "Editar mis prendas";
+  if (editorOpen) {
+    editOcc = occ;
+    syncEditTabs();
+    renderEditor();
+    setTimeout(function() {
+      document.getElementById("editorPanel").scrollIntoView({behavior:"smooth", block:"start"});
+    }, 100);
+  }
 }
 
-function setEditOcc(o){ editOcc=o; syncEditTabs(); renderEditor(); }
-
-function syncEditTabs(){
-  const occs=['trabajo','cita','casual'];
-  document.querySelectorAll('.edit-tab').forEach((t,i)=>t.classList.toggle('active',occs[i]===editOcc));
+function setEditOcc(o) {
+  editOcc = o;
+  syncEditTabs();
+  renderEditor();
 }
 
-function renderEditor(){
-  const body=document.getElementById('editBody');
-  body.innerHTML='';
-  const data=prendas[editOcc];
-  CATS.forEach(cat=>{
-    const sec=document.createElement('div');
-    sec.className='edit-cat';
-    sec.innerHTML=`<div class="edit-cat-label"><span>${cat.icon}</span>${cat.label}</div>`;
-    if(data[cat.key]===null){
-      sec.innerHTML+=`<p class="na-note">No aplica para este modo.</p>`;
-      const ab=document.createElement('button');
-      ab.className='btn-add-item'; ab.textContent='+ Activar';
-      ab.onclick=()=>{ prendas[editOcc][cat.key]=['']; renderEditor(); };
-      sec.appendChild(ab);
-    } else {
-      const rows=document.createElement('div');
-      rows.id='erows-'+cat.key;
-      (data[cat.key]||[]).forEach((v,i)=>rows.appendChild(mkRow(cat.key,i,v)));
-      sec.appendChild(rows);
-      const ab=document.createElement('button');
-      ab.className='btn-add-item'; ab.textContent='+ Agregar prenda';
-      ab.onclick=()=>{
-        prendas[editOcc][cat.key].push('');
-        const c=document.getElementById('erows-'+cat.key);
-        c.appendChild(mkRow(cat.key,prendas[editOcc][cat.key].length-1,''));
-        c.lastChild.querySelector('input').focus();
-      };
-      sec.appendChild(ab);
+function syncEditTabs() {
+  var occs = ["trabajo","cita","casual"];
+  var tabs = document.querySelectorAll(".edit-tab");
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].classList.toggle("active", occs[i] === editOcc);
+  }
+}
+
+function renderEditor() {
+  var body = document.getElementById("editBody");
+  body.innerHTML = "";
+  var data = prendas[editOcc];
+
+  for (var i = 0; i < CATS.length; i++) {
+    var cat = CATS[i];
+    var sec = document.createElement("div");
+    sec.className = "edit-cat";
+
+    var lbl = document.createElement("div");
+    lbl.className = "edit-cat-label";
+    lbl.innerHTML = cat.emoji + " " + cat.label;
+    sec.appendChild(lbl);
+
+    var items = data[cat.key];
+    if (!items) items = [];
+
+    var rowsDiv = document.createElement("div");
+    rowsDiv.id = "erows-" + cat.key;
+    for (var j = 0; j < items.length; j++) {
+      rowsDiv.appendChild(mkRow(cat.key, j, items[j]));
     }
+    sec.appendChild(rowsDiv);
+
+    var addBtn = document.createElement("button");
+    addBtn.className = "btn-add";
+    addBtn.textContent = "+ Agregar prenda";
+    (function(catKey) {
+      addBtn.onclick = function() {
+        if (!prendas[editOcc][catKey]) prendas[editOcc][catKey] = [];
+        prendas[editOcc][catKey].push("");
+        var c = document.getElementById("erows-" + catKey);
+        var newRow = mkRow(catKey, prendas[editOcc][catKey].length - 1, "");
+        c.appendChild(newRow);
+        newRow.querySelector("input").focus();
+      };
+    })(cat.key);
+    sec.appendChild(addBtn);
     body.appendChild(sec);
-  });
+  }
 }
 
-function mkRow(catKey,idx,val){
-  const row=document.createElement('div');
-  row.className='edit-row';
-  const inp=document.createElement('input');
-  inp.type='text'; inp.className='edit-input';
-  inp.value=val==='—'?'':val;
-  inp.placeholder='Nombre de la prenda...';
-  inp.oninput=e=>{ prendas[editOcc][catKey][idx]=e.target.value; };
-  const del=document.createElement('button');
-  del.className='btn-del'; del.innerHTML='✕';
-  del.onclick=()=>{ prendas[editOcc][catKey].splice(idx,1); if(!prendas[editOcc][catKey].length) prendas[editOcc][catKey]=null; renderEditor(); };
-  row.appendChild(inp); row.appendChild(del);
+function mkRow(catKey, idx, val) {
+  var row = document.createElement("div");
+  row.className = "edit-row";
+
+  var inp = document.createElement("input");
+  inp.type = "text";
+  inp.className = "edit-input";
+  inp.value = val;
+  inp.placeholder = "Nombre de la prenda...";
+  (function(k, i) {
+    inp.oninput = function() { prendas[editOcc][k][i] = this.value; };
+  })(catKey, idx);
+
+  var del = document.createElement("button");
+  del.className = "btn-del";
+  del.textContent = "x";
+  (function(k, i) {
+    del.onclick = function() {
+      prendas[editOcc][k].splice(i, 1);
+      if (!prendas[editOcc][k].length) prendas[editOcc][k] = [];
+      renderEditor();
+    };
+  })(catKey, idx);
+
+  row.appendChild(inp);
+  row.appendChild(del);
   return row;
 }
 
-function guardar(){
-  Object.keys(prendas).forEach(o=>{
-    CATS.forEach(cat=>{
-      const a=prendas[o][cat.key];
-      if(Array.isArray(a)){ prendas[o][cat.key]=a.filter(v=>v.trim()!==''); if(!prendas[o][cat.key].length) prendas[o][cat.key]=null; }
-    });
-  });
-  save();
-  showToast('Guardado');
-  setTimeout(()=>{ toggleEditor(); generar(false); },600);
+function guardar() {
+  var occKeys = ["trabajo","cita","casual"];
+  for (var o = 0; o < occKeys.length; o++) {
+    for (var c = 0; c < CATS.length; c++) {
+      var key = CATS[c].key;
+      var arr = prendas[occKeys[o]][key];
+      if (Array.isArray(arr)) {
+        var filtered = [];
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].trim() !== "") filtered.push(arr[i]);
+        }
+        prendas[occKeys[o]][key] = filtered.length ? filtered : null;
+      }
+    }
+  }
+  saveData();
+  showToast("Guardado");
+  setTimeout(function() { toggleEditor(); generar(false); }, 700);
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2000);
+function showToast(msg) {
+  var t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(function() { t.classList.remove("show"); }, 2000);
 }
 
-
+loadData();
+generar(false);
 </script>
 
 </body>
