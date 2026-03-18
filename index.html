@@ -1,169 +1,532 @@
-
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#080808">
-<title>Outfits</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f8f6f1">
+<title>ATELIER</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Didact+Gothic&display=swap" rel="stylesheet">
 <style>
+
+/* ── RESET + BASE ──────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg:#080808; --s1:#101010; --s2:#181818; --s3:#222222;
-  --border:#2a2a2a; --text:#eeebe4; --muted:#505050; --subtle:#1c1c1c;
-  --t-a:#4a8fff; --t-b:#0d2550; --c-a:#d47fff; --c-b:#2a0d50; --ca-a:#4fdb7a; --ca-b:#0a2814;
-  --active-a:var(--t-a); --active-b:var(--t-b);
-  --safe-top:env(safe-area-inset-top,0px);
+–cream:   #f8f6f1;
+–ivory:   #f0ede5;
+–border:  #d8d4ca;
+–rule:    #c8c4ba;
+–ink:     #111009;
+–mid:     #7a7670;
+–light:   #b0ada6;
+–gold:    #9a8a6a;
+–safe-t:  env(safe-area-inset-top,  0px);
+–safe-b:  env(safe-area-inset-bottom, 0px);
 }
-html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; overflow:hidden; -webkit-tap-highlight-color:transparent; }
-body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:.5; }
 
-.screen { position:fixed; inset:0; display:flex; flex-direction:column; transition:transform .38s cubic-bezier(.77,0,.18,1),opacity .38s; will-change:transform; overflow:hidden; }
-.screen.hidden { transform:translateX(100%); pointer-events:none; opacity:0; }
-.screen.slide-up { transform:translateY(100%); pointer-events:none; opacity:0; }
-.scroll-body { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+html { height: 100%; background: var(–cream); }
+body {
+min-height: 100%;
+background: var(–cream);
+color: var(–ink);
+font-family: ‘Didact Gothic’, ‘Gill Sans’, sans-serif;
+-webkit-tap-highlight-color: transparent;
+overflow-x: hidden;
+}
 
-/* ── GENERADOR ── */
-#screenGen { background:var(--bg); }
-.gen-header { padding:calc(var(--safe-top) + 44px) 22px 16px; flex-shrink:0; }
-.eyebrow { font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
-.big-title { font-family:'Bebas Neue',sans-serif; font-size:56px; line-height:.88; letter-spacing:.02em; }
-.big-title .occ-word { background:linear-gradient(120deg,var(--active-a) 0%,#fff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; transition:background .4s; }
+/* ── HEADER ────────────────────────────────────── */
+header {
+padding: calc(var(–safe-t) + 36px) 28px 0;
+text-align: center;
+position: relative;
+}
 
-.tabs-wrap { padding:0 22px 22px; flex-shrink:0; }
-.tabs { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
-.tab { border:1.5px solid var(--border); background:var(--s1); border-radius:14px; padding:12px 6px; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; transition:all .22s cubic-bezier(.34,1.56,.64,1); position:relative; overflow:hidden; }
-.tab::after { content:''; position:absolute; inset:0; opacity:0; transition:opacity .3s; border-radius:inherit; }
-.tab.trabajo::after { background:linear-gradient(135deg,rgba(74,143,255,.18),transparent); }
-.tab.cita::after    { background:linear-gradient(135deg,rgba(212,127,255,.18),transparent); }
-.tab.casual::after  { background:linear-gradient(135deg,rgba(79,219,122,.18),transparent); }
-.tab.active::after  { opacity:1; }
-.tab.active.trabajo { border-color:var(--t-a); box-shadow:0 0 18px rgba(74,143,255,.22); }
-.tab.active.cita    { border-color:var(--c-a); box-shadow:0 0 18px rgba(212,127,255,.22); }
-.tab.active.casual  { border-color:var(--ca-a); box-shadow:0 0 18px rgba(79,219,122,.22); }
-.tab:active { transform:scale(.93); }
-.tab-emoji { font-size:20px; }
-.tab-lbl { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); transition:color .2s; }
-.tab.active.trabajo .tab-lbl { color:var(--t-a); }
-.tab.active.cita    .tab-lbl { color:var(--c-a); }
-.tab.active.casual  .tab-lbl { color:var(--ca-a); }
+.header-rule {
+width: 100%;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–rule), transparent);
+margin-bottom: 22px;
+}
 
-.card-wrap { padding:0 22px; flex-shrink:0; }
-.outfit-card { background:var(--s1); border-radius:20px; border:1.5px solid var(--border); overflow:hidden; position:relative; }
-.outfit-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2.5px; background:linear-gradient(90deg,var(--active-a),transparent); transition:background .4s; }
-.card-head { padding:14px 18px 12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
-.card-label { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); font-weight:600; }
-.card-num { font-family:'Bebas Neue',sans-serif; font-size:13px; color:var(--active-a); letter-spacing:.1em; transition:color .4s; }
+.brand {
+font-family: ‘Playfair Display’, ‘Didot’, ‘Big Caslon’, serif;
+font-size: 11px;
+font-weight: 400;
+letter-spacing: .5em;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 18px;
+}
 
-.prenda-row { display:flex; align-items:center; padding:12px 18px; gap:13px; border-bottom:1px solid var(--subtle); animation:fs .35s ease both; }
-.prenda-row:last-child { border-bottom:none; }
-.prenda-row.na { opacity:.28; }
-@keyframes fs { from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
-.p-icon { font-size:19px; width:28px; text-align:center; flex-shrink:0; }
-.p-info { flex:1; min-width:0; }
-.p-cat { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); font-weight:600; margin-bottom:1px; }
-.p-val { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.prenda-row.na .p-val { font-style:italic; color:var(--muted); }
+.headline {
+font-family: ‘Playfair Display’, ‘Didot’, serif;
+font-size: 52px;
+font-weight: 400;
+line-height: .95;
+letter-spacing: -.01em;
+color: var(–ink);
+margin-bottom: 6px;
+}
 
-.actions { padding:16px 22px 0; display:flex; gap:10px; flex-shrink:0; }
-.btn-gen { flex:1; border:none; border-radius:14px; padding:18px; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:.08em; cursor:pointer; background:linear-gradient(135deg,var(--active-a),var(--active-b)); color:#fff; display:flex; align-items:center; justify-content:center; gap:8px; transition:transform .18s cubic-bezier(.34,1.56,.64,1); }
-.btn-gen:active { transform:scale(.96); }
-.btn-gen .dice { font-size:22px; }
-.btn-gen.spin .dice { animation:spindie .4s ease; }
-@keyframes spindie { 0%{transform:rotate(0) scale(1)} 50%{transform:rotate(180deg) scale(1.3)} 100%{transform:rotate(360deg) scale(1)} }
-.btn-edit { width:54px; height:54px; border:1.5px solid var(--border); background:var(--s1); border-radius:14px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .18s; flex-shrink:0; }
-.btn-edit:active { transform:scale(.93); background:var(--s2); }
-.footer-hint { padding:14px 22px 32px; text-align:center; flex-shrink:0; }
-.footer-hint p { font-size:10px; color:var(--muted); letter-spacing:.06em; }
+.headline em {
+font-style: italic;
+font-weight: 400;
+}
 
-/* ── EDITOR ── */
-#screenEdit { background:var(--bg); }
-.edit-header { padding:calc(var(--safe-top) + 44px) 22px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; border-bottom:1px solid var(--border); }
-.edit-title { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:.04em; }
-.btn-close { width:40px; height:40px; border:1.5px solid var(--border); background:var(--s1); border-radius:10px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.btn-close:active { background:var(--s2); }
+.subhead {
+font-size: 11px;
+letter-spacing: .22em;
+text-transform: uppercase;
+color: var(–light);
+margin-bottom: 28px;
+}
 
-.edit-tabs { display:flex; flex-shrink:0; border-bottom:1px solid var(--border); }
-.edit-tab { flex:1; padding:14px 8px; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; text-align:center; cursor:pointer; color:var(--muted); border-bottom:2px solid transparent; transition:all .2s; }
-.edit-tab.active { color:var(--text); border-bottom-color:var(--active-a); }
+.header-rule-bottom {
+width: 1px; height: 32px;
+background: linear-gradient(180deg, var(–rule), transparent);
+margin: 0 auto;
+}
 
-.edit-body { padding:0 22px 120px; }
-.edit-section { margin-top:22px; }
-.edit-sec-title { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
-.edit-sec-title span { font-size:16px; }
-.prenda-edit-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.prenda-input { flex:1; background:var(--s2); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-family:'Syne',sans-serif; font-size:13px; font-weight:500; outline:none; transition:border-color .2s; }
-.prenda-input:focus { border-color:var(--active-a); }
-.btn-del { width:36px; height:36px; background:transparent; border:1.5px solid var(--border); border-radius:9px; color:var(--muted); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; }
-.btn-del:active { background:#2a0a0a; border-color:#ff4444; color:#ff4444; }
-.btn-add { width:100%; background:transparent; border:1.5px dashed var(--border); border-radius:10px; padding:10px; color:var(--muted); font-family:'Syne',sans-serif; font-size:12px; font-weight:600; letter-spacing:.08em; cursor:pointer; transition:all .2s; margin-top:4px; }
-.btn-add:active { background:var(--s2); border-color:var(--active-a); color:var(--text); }
-.na-note { font-size:10px; color:var(--muted); font-style:italic; padding:4px 0 8px; }
+/* ── OCASIÓN SELECTOR ──────────────────────────── */
+.section-label {
+font-size: 9px;
+letter-spacing: .3em;
+text-transform: uppercase;
+color: var(–light);
+text-align: center;
+padding: 28px 28px 16px;
+}
 
-.save-bar { position:sticky; bottom:0; padding:16px 22px 36px; background:linear-gradient(transparent,var(--bg) 40%); margin:0 -22px; }
-.btn-save { width:100%; border:none; border-radius:14px; padding:18px; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:.08em; cursor:pointer; background:linear-gradient(135deg,var(--active-a),var(--active-b)); color:#fff; transition:transform .18s; }
-.btn-save:active { transform:scale(.97); }
+.occ-grid {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 1px;
+background: var(–border);
+margin: 0 28px;
+border: 1px solid var(–border);
+}
 
-.toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--s3); border:1px solid var(--border); border-radius:30px; padding:10px 20px; font-size:12px; font-weight:600; letter-spacing:.06em; opacity:0; transition:all .3s; pointer-events:none; white-space:nowrap; z-index:10000; }
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.occ-btn {
+background: var(–cream);
+border: none;
+padding: 20px 8px;
+cursor: pointer;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
+transition: background .18s;
+position: relative;
+}
+
+.occ-btn:active { background: var(–ivory); }
+
+.occ-btn.selected {
+background: var(–ink);
+}
+
+.occ-btn::after {
+content: ‘’;
+position: absolute;
+bottom: 0; left: 10%; right: 10%; height: 1px;
+background: var(–gold);
+transform: scaleX(0);
+transition: transform .25s;
+}
+.occ-btn.selected::after { transform: scaleX(1); }
+
+.occ-icon  { font-size: 20px; }
+.occ-label {
+font-size: 9px;
+letter-spacing: .22em;
+text-transform: uppercase;
+color: var(–mid);
+transition: color .18s;
+}
+.occ-btn.selected .occ-label { color: var(–cream); }
+.occ-btn.selected .occ-icon  { filter: none; }
+
+/* ── DIVIDER ───────────────────────────────────── */
+.ornament {
+text-align: center;
+padding: 24px 0 0;
+font-family: ‘Playfair Display’, serif;
+font-size: 18px;
+color: var(–border);
+letter-spacing: .3em;
+}
+
+/* ── OUTFIT CARD ───────────────────────────────── */
+.outfit-section {
+padding: 0 28px 24px;
+}
+
+.outfit-meta {
+display: flex;
+align-items: baseline;
+justify-content: space-between;
+padding: 16px 0 14px;
+border-bottom: 1px solid var(–border);
+margin-bottom: 0;
+}
+
+.outfit-counter {
+font-size: 10px;
+letter-spacing: .2em;
+text-transform: uppercase;
+color: var(–light);
+}
+
+.outfit-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 15px;
+font-style: italic;
+color: var(–gold);
+}
+
+/* prenda rows */
+.prenda {
+display: flex;
+align-items: center;
+padding: 15px 0;
+border-bottom: 1px solid var(–ivory);
+gap: 14px;
+animation: slideIn .3s ease both;
+}
+.prenda:last-child { border-bottom: 1px solid var(–border); }
+.prenda.na { opacity: .3; }
+
+@keyframes slideIn {
+from { opacity: 0; transform: translateY(6px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.prenda-icon { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+.prenda-body { flex: 1; min-width: 0; }
+.prenda-cat {
+font-size: 8px;
+letter-spacing: .24em;
+text-transform: uppercase;
+color: var(–light);
+margin-bottom: 2px;
+}
+.prenda-val {
+font-family: ‘Playfair Display’, serif;
+font-size: 16px;
+font-weight: 400;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+color: var(–ink);
+}
+.prenda.na .prenda-val {
+font-style: italic;
+color: var(–light);
+font-family: ‘Didact Gothic’, sans-serif;
+font-size: 13px;
+}
+
+/* ── GENERATE BUTTON ───────────────────────────── */
+.gen-wrap {
+padding: 20px 28px 0;
+}
+
+.btn-gen {
+width: 100%;
+background: var(–ink);
+color: var(–cream);
+border: none;
+padding: 19px 24px;
+font-size: 10px;
+letter-spacing: .38em;
+text-transform: uppercase;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 14px;
+transition: background .18s, transform .15s;
+font-family: ‘Didact Gothic’, sans-serif;
+}
+.btn-gen:active { background: #2a2820; transform: scale(.99); }
+
+.btn-gen .dice { font-size: 16px; }
+.btn-gen.spin .dice { animation: rolldie .4s ease; }
+@keyframes rolldie {
+0%   { transform: rotate(0)      scale(1);   }
+50%  { transform: rotate(180deg) scale(1.4); }
+100% { transform: rotate(360deg) scale(1);   }
+}
+
+.gen-hint {
+text-align: center;
+font-size: 9px;
+letter-spacing: .16em;
+text-transform: uppercase;
+color: var(–light);
+padding: 12px 0 0;
+}
+
+/* ── RULE + EDIT ───────────────────────────────── */
+.mid-rule {
+width: 100%;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–border), transparent);
+margin: 28px 0 0;
+}
+
+.edit-toggle-wrap {
+text-align: center;
+padding: 18px 28px 0;
+}
+
+.btn-edit-toggle {
+background: none;
+border: 1px solid var(–border);
+color: var(–mid);
+padding: 12px 28px;
+font-size: 9px;
+letter-spacing: .3em;
+text-transform: uppercase;
+cursor: pointer;
+font-family: ‘Didact Gothic’, sans-serif;
+transition: all .2s;
+width: 100%;
+}
+.btn-edit-toggle:active { background: var(–ivory); }
+.btn-edit-toggle.open   { background: var(–ivory); color: var(–ink); border-color: var(–rule); }
+
+/* ── EDITOR PANEL ──────────────────────────────── */
+.editor-panel {
+max-height: 0;
+overflow: hidden;
+transition: max-height .45s cubic-bezier(.77,0,.18,1);
+}
+.editor-panel.open { max-height: 2400px; }
+
+.editor-inner { padding: 0 28px 32px; }
+
+.edit-occ-tabs {
+display: flex;
+border-bottom: 1px solid var(–border);
+margin: 20px 0 0;
+}
+.edit-tab {
+flex: 1;
+padding: 12px 6px;
+font-size: 9px;
+letter-spacing: .18em;
+text-transform: uppercase;
+text-align: center;
+cursor: pointer;
+color: var(–light);
+border-bottom: 1.5px solid transparent;
+transition: all .2s;
+font-family: ‘Didact Gothic’, sans-serif;
+}
+.edit-tab.active { color: var(–ink); border-bottom-color: var(–ink); }
+
+.edit-cat { margin-top: 22px; }
+.edit-cat-label {
+font-size: 8px;
+letter-spacing: .26em;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 10px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.edit-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+
+.edit-input {
+flex: 1;
+background: var(–ivory);
+border: 1px solid var(–border);
+padding: 10px 13px;
+color: var(–ink);
+font-family: ‘Playfair Display’, serif;
+font-size: 14px;
+outline: none;
+border-radius: 0;
+transition: border-color .2s;
+-webkit-appearance: none;
+}
+.edit-input:focus { border-color: var(–ink); }
+
+.btn-del {
+width: 34px; height: 34px;
+background: none;
+border: 1px solid var(–border);
+color: var(–light);
+font-size: 12px;
+cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+transition: all .15s;
+}
+.btn-del:active { background: #fde8e8; border-color: #d88; color: #900; }
+
+.btn-add-item {
+width: 100%;
+background: none;
+border: 1px dashed var(–border);
+padding: 10px;
+color: var(–light);
+font-size: 9px;
+letter-spacing: .2em;
+text-transform: uppercase;
+cursor: pointer;
+font-family: ‘Didact Gothic’, sans-serif;
+transition: all .2s;
+margin-top: 4px;
+}
+.btn-add-item:active { background: var(–ivory); color: var(–ink); border-color: var(–rule); }
+
+.na-note {
+font-size: 11px;
+font-style: italic;
+color: var(–light);
+padding: 4px 0 8px;
+font-family: ‘Playfair Display’, serif;
+}
+
+.btn-save {
+width: 100%;
+background: var(–ink);
+color: var(–cream);
+border: none;
+padding: 18px;
+font-size: 10px;
+letter-spacing: .36em;
+text-transform: uppercase;
+cursor: pointer;
+font-family: ‘Didact Gothic’, sans-serif;
+margin-top: 24px;
+transition: background .18s;
+}
+.btn-save:active { background: #2a2820; }
+
+/* ── FOOTER ────────────────────────────────────── */
+.footer {
+padding: calc(24px + var(–safe-b)) 28px 0;
+text-align: center;
+border-top: 1px solid var(–border);
+margin-top: 28px;
+}
+.footer p {
+font-size: 9px;
+letter-spacing: .22em;
+text-transform: uppercase;
+color: var(–light);
+padding-bottom: 24px;
+}
+
+/* ── TOAST ─────────────────────────────────────── */
+.toast {
+position: fixed;
+bottom: 36px; left: 50%;
+transform: translateX(-50%) translateY(12px);
+background: var(–ink); color: var(–cream);
+padding: 10px 24px;
+font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
+font-family: ‘Didact Gothic’, sans-serif;
+opacity: 0; transition: all .3s;
+pointer-events: none; white-space: nowrap; z-index: 9999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 </style>
 </head>
 <body>
 
-<!-- GENERADOR -->
-<div class="screen" id="screenGen">
-  <div class="gen-header">
-    <p class="eyebrow">Generador personal</p>
-    <h1 class="big-title">MI<br><span class="occ-word" id="titleWord">TRABAJO</span></h1>
-  </div>
-  <div class="tabs-wrap">
-    <div class="tabs">
-      <button class="tab trabajo active" onclick="setOcc('trabajo')"><span class="tab-emoji">💼</span><span class="tab-lbl">Trabajo</span></button>
-      <button class="tab cita" onclick="setOcc('cita')"><span class="tab-emoji">🌙</span><span class="tab-lbl">Cita</span></button>
-      <button class="tab casual" onclick="setOcc('casual')"><span class="tab-emoji">☀️</span><span class="tab-lbl">Casual</span></button>
-    </div>
-  </div>
-  <div class="card-wrap">
-    <div class="outfit-card">
-      <div class="card-head">
-        <span class="card-label">Outfit generado</span>
-        <span class="card-num" id="outfitNum">#1</span>
-      </div>
-      <div id="prendasList"></div>
-    </div>
-  </div>
-  <div class="actions">
-    <button class="btn-gen" id="genBtn" onclick="generar()"><span class="dice">🎲</span><span>GENERAR</span></button>
-    <button class="btn-edit" onclick="openEditor()">✏️</button>
-  </div>
-  <div class="footer-hint"><p>Toca ✏️ para editar tus prendas reales</p></div>
+<!-- ── HEADER ── -->
+
+<header>
+  <div class="header-rule"></div>
+  <p class="brand">Atelier Personnel</p>
+  <h1 class="headline">Mon<br><em>Outfit</em></h1>
+  <p class="subhead">Collection Privée</p>
+  <div class="header-rule-bottom"></div>
+</header>
+
+<!-- ── OCASIÓN ── -->
+
+<p class="section-label">Selecciona la ocasión</p>
+<div class="occ-grid">
+  <button class="occ-btn selected" data-occ="trabajo" onclick="setOcc('trabajo',this)">
+    <span class="occ-icon">💼</span>
+    <span class="occ-label">Trabajo</span>
+  </button>
+  <button class="occ-btn" data-occ="cita" onclick="setOcc('cita',this)">
+    <span class="occ-icon">🌙</span>
+    <span class="occ-label">Cita</span>
+  </button>
+  <button class="occ-btn" data-occ="casual" onclick="setOcc('casual',this)">
+    <span class="occ-icon">☀️</span>
+    <span class="occ-label">Casual</span>
+  </button>
 </div>
 
-<!-- EDITOR -->
-<div class="screen hidden" id="screenEdit">
-  <div class="edit-header">
-    <span class="edit-title">MIS PRENDAS</span>
-    <button class="btn-close" onclick="closeEditor()">✕</button>
+<div class="ornament">— ✦ —</div>
+
+<!-- ── OUTFIT ── -->
+
+<div class="outfit-section">
+  <div class="outfit-meta">
+    <span class="outfit-counter">Look <span id="outfitNum">#1</span></span>
+    <span class="outfit-title" id="outfitTitle">Pour le bureau</span>
   </div>
-  <div class="edit-tabs">
-    <div class="edit-tab active" onclick="setEditOcc('trabajo')">💼 Trabajo</div>
-    <div class="edit-tab" onclick="setEditOcc('cita')">🌙 Cita</div>
-    <div class="edit-tab" onclick="setEditOcc('casual')">☀️ Casual</div>
-  </div>
-  <div class="scroll-body">
-    <div class="edit-body" id="editBody"></div>
-    <div class="save-bar" style="padding:16px 22px 36px">
-      <button class="btn-save" onclick="guardarPrendas()">💾 GUARDAR CAMBIOS</button>
+  <div id="prendasList"></div>
+</div>
+
+<!-- ── GENERAR ── -->
+
+<div class="gen-wrap">
+  <button class="btn-gen" id="genBtn" onclick="generar()">
+    <span class="dice">✦</span>
+    <span>Nouveau look</span>
+  </button>
+  <p class="gen-hint">Toca para generar una nueva combinación</p>
+</div>
+
+<!-- ── EDITAR ── -->
+
+<div class="mid-rule"></div>
+<div class="edit-toggle-wrap">
+  <button class="btn-edit-toggle" id="editToggleBtn" onclick="toggleEditor()">
+    Editar mis prendas
+  </button>
+</div>
+
+<div class="editor-panel" id="editorPanel">
+  <div class="editor-inner">
+    <div class="edit-occ-tabs">
+      <div class="edit-tab active" onclick="setEditOcc('trabajo')">💼 Trabajo</div>
+      <div class="edit-tab" onclick="setEditOcc('cita')">🌙 Cita</div>
+      <div class="edit-tab" onclick="setEditOcc('casual')">☀️ Casual</div>
     </div>
+    <div id="editBody"></div>
+    <button class="btn-save" onclick="guardar()">Guardar</button>
   </div>
+</div>
+
+<!-- ── FOOTER ── -->
+
+<div class="footer">
+  <p>Generador personal · Édition privée</p>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+// ═══════════════════════════════════════════════
+// DATOS
+// ═══════════════════════════════════════════════
 const DEFAULT = {
   trabajo:{
     arriba:["Polo blanco liso","Polo azul marino","Polo gris claro","Camiseta negra básica","Polo verde olivo","Polo burdeos","Camiseta blanca cuello V","Polo beige","Oxford blanca","Oxford azul claro","Camisa cuadros grises","Camisa azul marino","Camisa blanca slim","Camisa beige lino","Oxford celeste","Oxford rayas finas"],
@@ -174,7 +537,7 @@ const DEFAULT = {
     chamarra:["Sin chamarra","Blazer gris","Blazer azul marino","Blazer negro","Blazer beige","Blazer cuadros","Blazer camel","Blazer burdeos"],
   },
   cita:{
-    arriba:["Camiseta negra slim","Camiseta blanca básica","Camiseta gris oscuro","Camiseta burdeos","Camiseta azul marino","Polo negro","Camiseta vino","Polo gris","Camisa negra","Camisa blanca slim","Camisa azul oscuro","Camisa gris marengo","Camisa vino","Oxford blanca","Camisa burdeos","Camisa gris carbón"],
+    arriba:["Camiseta negra slim","Camiseta blanca básica","Camiseta gris oscuro","Camiseta burdeos","Polo negro","Camiseta vino","Camisa negra","Camisa blanca slim","Camisa azul oscuro","Camisa gris marengo","Camisa vino","Oxford blanca","Camisa burdeos","Camisa gris carbón"],
     pantalon:["Jeans negro slim","Chino negro","Jeans azul oscuro slim","Pantalón gris oscuro","Jeans gris","Chino marrón oscuro","Jeans negro skinny","Jeans azul índigo"],
     tenis:["Sneakers blancos limpios","Sneakers negros","Sneakers gris claro","Sneakers cuero blanco","Sneakers negro mate","Sneakers minimalistas"],
     formal:["Derby negro","Chelsea boots negro","Oxford café oscuro","Chelsea boots café","Monk strap negro","Chelsea boots cognac"],
@@ -191,82 +554,74 @@ const DEFAULT = {
   }
 };
 
-const CATS=[
-  {key:'arriba',icon:'👕',label:'Parte de arriba'},
-  {key:'pantalon',icon:'👖',label:'Pantalón / Jeans'},
-  {key:'tenis',icon:'👟',label:'Tenis / Sneakers'},
-  {key:'formal',icon:'👞',label:'Calzado formal'},
-  {key:'casual_shoe',icon:'🥾',label:'Calzado casual'},
-  {key:'chamarra',icon:'🧥',label:'Chamarra / Jacket'},
+const CATS = [
+  {key:'arriba',     icon:'👕', label:'Partie du haut'},
+  {key:'pantalon',   icon:'👖', label:'Pantalón'},
+  {key:'tenis',      icon:'👟', label:'Tenis / Sneakers'},
+  {key:'formal',     icon:'👞', label:'Calzado formal'},
+  {key:'casual_shoe',icon:'🥾', label:'Calzado casual'},
+  {key:'chamarra',   icon:'🧥', label:'Chamarra'},
 ];
 
-const OCC={
-  trabajo:{a:'#4a8fff',b:'#0d2550',word:'TRABAJO'},
-  cita:   {a:'#d47fff',b:'#2a0d50',word:'CITA'},
-  casual: {a:'#4fdb7a',b:'#0a2814',word:'CASUAL'},
+const TITLES = {
+  trabajo:['Pour le bureau','Style professionnel','Au travail','Réunion du jour'],
+  cita:   ['Pour ce soir','Une nuit spéciale','Soirée élégante','Rendez-vous'],
+  casual: ["L'essentiel du jour",'Week-end style','Décontracté chic','Simplicité'],
 };
 
-let occActual='trabajo', editOcc='trabajo', count=1, prendas={};
+let occ='trabajo', editOcc='trabajo', count=1, prendas={};
 
-function load(){ const s=localStorage.getItem('op3'); prendas=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT)); }
-function save(){ localStorage.setItem('op3',JSON.stringify(prendas)); }
+function load(){ const s=localStorage.getItem('atelier_v1'); prendas=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT)); }
+function save(){ localStorage.setItem('atelier_v1',JSON.stringify(prendas)); }
 function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
-function setCSS(occ){ const c=OCC[occ]; document.documentElement.style.setProperty('--active-a',c.a); document.documentElement.style.setProperty('--active-b',c.b); }
 
-function setOcc(occ){
-  occActual=occ;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelector('.tab.'+occ).classList.add('active');
-  setCSS(occ);
-  document.getElementById('titleWord').textContent=OCC[occ].word;
+// ── OCASIÓN ──
+function setOcc(o, btn){
+  occ = o;
+  document.querySelectorAll('.occ-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
   generar(false);
 }
 
+// ── GENERAR ──
 function generar(animate=true){
   if(animate){
     const b=document.getElementById('genBtn');
-    b.classList.add('spin'); setTimeout(()=>b.classList.remove('spin'),420);
+    b.classList.add('spin');
+    setTimeout(()=>b.classList.remove('spin'),420);
     count++;
   }
-  document.getElementById('outfitNum').textContent='#'+count;
+  document.getElementById('outfitNum').textContent = '#'+count;
+  document.getElementById('outfitTitle').textContent = rand(TITLES[occ]);
+
   const list=document.getElementById('prendasList');
   list.innerHTML='';
-  const data=prendas[occActual];
+  const data=prendas[occ];
+
   CATS.forEach((cat,i)=>{
     const opts=data[cat.key];
     const row=document.createElement('div');
-    row.className='prenda-row';
+    row.className='prenda'+((!opts||!opts.length)?' na':'');
     row.style.animationDelay=(i*50)+'ms';
-    if(!opts||!opts.length){
-      row.classList.add('na');
-      row.innerHTML=`<div class="p-icon">${cat.icon}</div><div class="p-info"><div class="p-cat">${cat.label}</div><div class="p-val">No aplica</div></div>`;
-    } else {
-      row.innerHTML=`<div class="p-icon">${cat.icon}</div><div class="p-info"><div class="p-cat">${cat.label}</div><div class="p-val">${rand(opts)}</div></div>`;
-    }
+    const val=opts&&opts.length ? rand(opts) : 'Non applicable';
+    row.innerHTML=`<div class="prenda-icon">${cat.icon}</div><div class="prenda-body"><div class="prenda-cat">${cat.label}</div><div class="prenda-val">${val}</div></div>`;
     list.appendChild(row);
   });
 }
 
-function openEditor(){
-  editOcc=occActual;
-  const s=document.getElementById('screenEdit');
-  s.classList.remove('hidden','slide-up');
-  void s.offsetWidth;
-  s.classList.add('slide-up');
-  void s.offsetWidth;
-  s.classList.remove('slide-up');
-  syncETabs(); renderEditor();
+// ── EDITOR ──
+let editorOpen=false;
+function toggleEditor(){
+  editorOpen=!editorOpen;
+  document.getElementById('editorPanel').classList.toggle('open',editorOpen);
+  document.getElementById('editToggleBtn').classList.toggle('open',editorOpen);
+  document.getElementById('editToggleBtn').textContent = editorOpen ? 'Cerrar editor' : 'Editar mis prendas';
+  if(editorOpen){ editOcc=occ; syncEditTabs(); renderEditor(); setTimeout(()=>{ document.getElementById('editorPanel').scrollIntoView({behavior:'smooth',block:'start'}); },100); }
 }
 
-function closeEditor(){
-  const s=document.getElementById('screenEdit');
-  s.classList.add('slide-up');
-  setTimeout(()=>s.classList.add('hidden'),380);
-}
+function setEditOcc(o){ editOcc=o; syncEditTabs(); renderEditor(); }
 
-function setEditOcc(occ){ editOcc=occ; setCSS(occ); syncETabs(); renderEditor(); }
-
-function syncETabs(){
+function syncEditTabs(){
   const occs=['trabajo','cita','casual'];
   document.querySelectorAll('.edit-tab').forEach((t,i)=>t.classList.toggle('active',occs[i]===editOcc));
 }
@@ -277,25 +632,24 @@ function renderEditor(){
   const data=prendas[editOcc];
   CATS.forEach(cat=>{
     const sec=document.createElement('div');
-    sec.className='edit-section';
-    sec.innerHTML=`<div class="edit-sec-title"><span>${cat.icon}</span>${cat.label}</div>`;
-    const isNA=data[cat.key]===null;
-    if(isNA){
-      sec.innerHTML+=`<p class="na-note">No aplica para este modo. Toca + para activar.</p>`;
+    sec.className='edit-cat';
+    sec.innerHTML=`<div class="edit-cat-label"><span>${cat.icon}</span>${cat.label}</div>`;
+    if(data[cat.key]===null){
+      sec.innerHTML+=`<p class="na-note">No aplica para este modo.</p>`;
       const ab=document.createElement('button');
-      ab.className='btn-add'; ab.textContent='+ Activar categoría';
+      ab.className='btn-add-item'; ab.textContent='+ Activar';
       ab.onclick=()=>{ prendas[editOcc][cat.key]=['']; renderEditor(); };
       sec.appendChild(ab);
     } else {
       const rows=document.createElement('div');
-      rows.id='rows-'+cat.key;
+      rows.id='erows-'+cat.key;
       (data[cat.key]||[]).forEach((v,i)=>rows.appendChild(mkRow(cat.key,i,v)));
       sec.appendChild(rows);
       const ab=document.createElement('button');
-      ab.className='btn-add'; ab.textContent='+ Agregar prenda';
+      ab.className='btn-add-item'; ab.textContent='+ Agregar prenda';
       ab.onclick=()=>{
         prendas[editOcc][cat.key].push('');
-        const c=document.getElementById('rows-'+cat.key);
+        const c=document.getElementById('erows-'+cat.key);
         c.appendChild(mkRow(cat.key,prendas[editOcc][cat.key].length-1,''));
         c.lastChild.querySelector('input').focus();
       };
@@ -307,45 +661,39 @@ function renderEditor(){
 
 function mkRow(catKey,idx,val){
   const row=document.createElement('div');
-  row.className='prenda-edit-row';
+  row.className='edit-row';
   const inp=document.createElement('input');
-  inp.type='text'; inp.className='prenda-input';
+  inp.type='text'; inp.className='edit-input';
   inp.value=val==='—'?'':val;
   inp.placeholder='Nombre de la prenda...';
   inp.oninput=e=>{ prendas[editOcc][catKey][idx]=e.target.value; };
   const del=document.createElement('button');
-  del.className='btn-del'; del.innerHTML='🗑';
-  del.onclick=()=>{
-    prendas[editOcc][catKey].splice(idx,1);
-    if(!prendas[editOcc][catKey].length) prendas[editOcc][catKey]=null;
-    renderEditor();
-  };
+  del.className='btn-del'; del.innerHTML='✕';
+  del.onclick=()=>{ prendas[editOcc][catKey].splice(idx,1); if(!prendas[editOcc][catKey].length) prendas[editOcc][catKey]=null; renderEditor(); };
   row.appendChild(inp); row.appendChild(del);
   return row;
 }
 
-function guardarPrendas(){
-  Object.keys(prendas).forEach(occ=>{
+function guardar(){
+  Object.keys(prendas).forEach(o=>{
     CATS.forEach(cat=>{
-      const a=prendas[occ][cat.key];
-      if(Array.isArray(a)){
-        prendas[occ][cat.key]=a.filter(v=>v.trim()!=='');
-        if(!prendas[occ][cat.key].length) prendas[occ][cat.key]=null;
-      }
+      const a=prendas[o][cat.key];
+      if(Array.isArray(a)){ prendas[o][cat.key]=a.filter(v=>v.trim()!==''); if(!prendas[o][cat.key].length) prendas[o][cat.key]=null; }
     });
   });
   save();
-  toast('✅ Guardado');
-  setTimeout(()=>{ closeEditor(); setCSS(occActual); setOcc(editOcc); },800);
+  showToast('Guardado');
+  setTimeout(()=>{ toggleEditor(); generar(false); },600);
 }
 
-function toast(msg){
+function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2200);
+  setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-load(); setOcc('trabajo');
+load(); generar(false);
 </script>
+
 </body>
 </html>
