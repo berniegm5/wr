@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+
+# Crear la app con imágenes reales y closet editable
+html_content = '''<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍂 Sudoku de Estilo - Warm Autumn</title>
+    <title>🍂 Mi Sudoku de Estilo - Warm Autumn</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,143 +20,116 @@
             --burgundy: #722F37;
             --forest: #2F4F2F;
             --locked: #E74C3C;
-            --unlocked: #95A5A6;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Outfit', sans-serif;
             background: linear-gradient(135deg, var(--warm-cream) 0%, var(--warm-beige) 100%);
             min-height: 100vh;
-            padding: 15px;
+            padding: 12px;
             color: var(--deep-brown);
             -webkit-font-smoothing: antialiased;
         }
         .container { max-width: 900px; margin: 0 auto; }
         header {
             text-align: center;
-            margin-bottom: 20px;
-            padding: 18px;
+            margin-bottom: 16px;
+            padding: 16px;
             background: rgba(255,255,255,0.7);
-            border-radius: 20px;
+            border-radius: 18px;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 2px solid var(--burnt-orange);
         }
         header h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--terracotta);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             flex-wrap: wrap;
         }
-        header p {
-            color: var(--rust);
-            font-size: 0.9rem;
-            font-weight: 400;
-        }
-        .palette-info {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        .color-dot {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
+        header p { color: var(--rust); font-size: 0.85rem; }
+
         .controls {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
         .btn {
-            padding: 12px 20px;
+            padding: 10px 18px;
             border: none;
             border-radius: 50px;
             font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            gap: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             -webkit-appearance: none;
             touch-action: manipulation;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--terracotta), var(--burnt-orange));
-            color: white;
-        }
-        .btn-secondary {
-            background: white;
-            color: var(--deep-brown);
-            border: 2px solid var(--burnt-orange);
-        }
-        .btn-danger {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-        }
+        .btn-primary { background: linear-gradient(135deg, var(--terracotta), var(--burnt-orange)); color: white; }
+        .btn-secondary { background: white; color: var(--deep-brown); border: 2px solid var(--burnt-orange); }
+        .btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+        .btn-success { background: linear-gradient(135deg, var(--olive), var(--forest)); color: white; }
+        .btn:active { transform: scale(0.95); }
+
         .mode-selector {
             display: flex;
             justify-content: center;
             gap: 8px;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
         .mode-btn {
-            padding: 10px 18px;
+            padding: 8px 16px;
             border: 2px solid var(--burnt-orange);
             background: white;
             border-radius: 25px;
             cursor: pointer;
             font-family: 'Outfit', sans-serif;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: all 0.3s;
             color: var(--deep-brown);
             -webkit-appearance: none;
-            touch-action: manipulation;
         }
-        .mode-btn.active {
-            background: var(--burnt-orange);
-            color: white;
-        }
+        .mode-btn.active { background: var(--burnt-orange); color: white; }
+
         .sudoku-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
+            gap: 5px;
             max-width: 600px;
-            margin: 0 auto 25px;
+            margin: 0 auto 20px;
             background: var(--deep-brown);
-            padding: 8px;
-            border-radius: 18px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+            padding: 6px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
         }
         .cell {
             background: white;
-            border-radius: 14px;
-            padding: 12px 8px;
+            border-radius: 12px;
+            padding: 8px 6px;
             text-align: center;
             position: relative;
             transition: all 0.3s ease;
-            min-height: 120px;
+            min-height: 160px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             cursor: pointer;
             border: 3px solid transparent;
             touch-action: manipulation;
+            overflow: hidden;
         }
         .cell:active { transform: scale(0.97); }
         .cell.locked {
@@ -164,150 +139,213 @@
         .cell.locked::after {
             content: '🔒';
             position: absolute;
-            top: 6px;
-            right: 6px;
-            font-size: 1rem;
+            top: 4px;
+            right: 4px;
+            font-size: 0.9rem;
+            z-index: 5;
         }
         .cell-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 6px;
-            padding: 3px 10px;
-            border-radius: 20px;
+            margin-bottom: 4px;
+            padding: 2px 8px;
+            border-radius: 15px;
             color: white;
         }
         .label-top { background: var(--terracotta); }
         .label-bottom { background: var(--olive); }
         .label-layer { background: var(--mustard); color: var(--deep-brown); }
+        .cell-img {
+            width: 100%;
+            height: 85px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            background: var(--warm-cream);
+        }
         .cell-content {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--deep-brown);
-            line-height: 1.3;
-            padding: 0 4px;
+            line-height: 1.2;
+            padding: 0 2px;
         }
-        .cell-icon { font-size: 1.8rem; margin-bottom: 4px; }
-        .legend {
+
+        .section {
             background: white;
-            border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-        .legend h3 {
+        .section h3 {
             color: var(--terracotta);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
-        .legend-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
+
+        .editor-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }
-        .legend-item {
+        .category-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .cat-tab {
+            padding: 8px 14px;
+            border: 2px solid var(--warm-beige);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+            -webkit-appearance: none;
+        }
+        .cat-tab.active {
+            background: var(--deep-brown);
+            color: white;
+            border-color: var(--deep-brown);
+        }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .item-row {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 10px;
             background: var(--warm-cream);
             border-radius: 12px;
-            border-left: 4px solid var(--burnt-orange);
+            border-left: 3px solid var(--burnt-orange);
         }
-        .legend-item .icon { font-size: 1.5rem; }
-        .legend-item .info h4 {
-            font-size: 0.85rem;
-            color: var(--deep-brown);
-            margin-bottom: 2px;
+        .item-row img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: var(--warm-beige);
         }
-        .legend-item .info p {
-            font-size: 0.75rem;
-            color: var(--rust);
+        .item-row .info { flex: 1; }
+        .item-row .info h4 { font-size: 0.85rem; color: var(--deep-brown); }
+        .item-row .info p { font-size: 0.75rem; color: var(--rust); }
+        .item-row .actions {
+            display: flex;
+            gap: 6px;
         }
-        .itinerary {
-            background: white;
-            border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        .itinerary h3 {
-            color: var(--terracotta);
-            margin-bottom: 12px;
+        .item-row .actions button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1.1rem;
+            justify-content: center;
+            -webkit-appearance: none;
         }
+        .btn-edit { background: var(--mustard); }
+        .btn-delete { background: #e74c3c; color: white; }
+
+        .add-form {
+            display: none;
+            background: var(--warm-cream);
+            padding: 14px;
+            border-radius: 14px;
+            margin-top: 12px;
+            border: 2px solid var(--burnt-orange);
+        }
+        .add-form.active { display: block; }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--deep-brown);
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--warm-beige);
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            -webkit-appearance: none;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--burnt-orange);
+        }
+        .form-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
         .day-card {
             background: linear-gradient(135deg, var(--warm-cream), white);
             border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
             border-left: 4px solid var(--burnt-orange);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .day-number {
             background: var(--terracotta);
             color: white;
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.9rem;
             flex-shrink: 0;
         }
-        .day-outfit h4 {
-            font-size: 0.9rem;
-            color: var(--deep-brown);
-            margin-bottom: 3px;
-        }
-        .day-outfit p {
-            font-size: 0.8rem;
-            color: var(--rust);
-            line-height: 1.3;
-        }
+        .day-outfit h4 { font-size: 0.85rem; color: var(--deep-brown); margin-bottom: 2px; }
+        .day-outfit p { font-size: 0.75rem; color: var(--rust); line-height: 1.3; }
+
         .tips {
             background: linear-gradient(135deg, var(--olive), var(--forest));
             color: white;
-            border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
         }
-        .tips h3 {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1.1rem;
-        }
+        .tips h3 { margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-size: 1rem; }
         .tips ul { list-style: none; }
-        .tips li {
-            padding: 6px 0;
-            padding-left: 22px;
-            position: relative;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        .tips li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--mustard);
-            font-weight: bold;
-        }
+        .tips li { padding: 5px 0; padding-left: 20px; position: relative; font-size: 0.85rem; line-height: 1.4; }
+        .tips li::before { content: '✓'; position: absolute; left: 0; color: var(--mustard); font-weight: bold; }
+
         .toast {
             position: fixed;
-            bottom: 25px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: var(--deep-brown);
@@ -315,36 +353,29 @@
             padding: 12px 24px;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             opacity: 0;
             transition: all 0.4s ease;
             z-index: 1000;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             pointer-events: none;
         }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--rust);
+            font-size: 0.9rem;
         }
-        @media (min-width: 600px) {
-            .legend-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        .empty-state .big { font-size: 2.5rem; margin-bottom: 8px; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🍂 Sudoku de Estilo</h1>
-            <p>Combinador de outfits · Paleta Warm Autumn · Hombre 30s</p>
-            <div class="palette-info">
-                <div class="color-dot" style="background: #C75B3A;" title="Terracota"></div>
-                <div class="color-dot" style="background: #D4853A;" title="Naranja quemado"></div>
-                <div class="color-dot" style="background: #6B7B3E;" title="Oliva"></div>
-                <div class="color-dot" style="background: #8B4513;" title="Café óxido"></div>
-                <div class="color-dot" style="background: #C9A227;" title="Mostaza"></div>
-                <div class="color-dot" style="background: #722F37;" title="Borgoña"></div>
-                <div class="color-dot" style="background: #2F4F2F;" title="Verde bosque"></div>
-            </div>
+            <h1>🍂 Mi Sudoku de Estilo</h1>
+            <p>Edición Warm Autumn · Hombre 30s · Tu closet real</p>
         </header>
 
         <div class="mode-selector">
@@ -360,13 +391,53 @@
 
         <div class="sudoku-grid" id="sudokuGrid"></div>
 
-        <div class="legend">
-            <h3>📋 Guía de Prendas</h3>
-            <div class="legend-grid" id="legendGrid"></div>
+        <!-- EDITOR DE CLOSET -->
+        <div class="section">
+            <h3>👕 Mi Closet (Editable)</h3>
+            <p style="font-size:0.8rem;color:var(--rust);margin-bottom:12px;">
+                Agrega, edita o elimina prendas. Se guarda automáticamente en tu navegador.
+            </p>
+            
+            <div class="category-tabs">
+                <button class="cat-tab active" onclick="setEditorTab('top')">👔 Tops</button>
+                <button class="cat-tab" onclick="setEditorTab('bottom')">👖 Bottoms</button>
+                <button class="cat-tab" onclick="setEditorTab('layer')">🧥 Layers</button>
+            </div>
+
+            <div class="editor-controls">
+                <button class="btn btn-success" onclick="toggleAddForm()">➕ Agregar prenda</button>
+                <button class="btn btn-secondary" onclick="resetToDefaults()">↩️ Restaurar defaults</button>
+            </div>
+
+            <div class="add-form" id="addForm">
+                <div class="form-group">
+                    <label>Nombre de la prenda</label>
+                    <input type="text" id="itemName" placeholder="Ej: Camisa de lino terracota">
+                </div>
+                <div class="form-group">
+                    <label>URL de imagen (opcional)</label>
+                    <input type="text" id="itemImage" placeholder="Pega link de foto o déjalo vacío">
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="itemCategory">
+                        <option value="top">Top (parte superior)</option>
+                        <option value="bottom">Bottom (parte inferior)</option>
+                        <option value="layer">Layer (capa/saco)</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-success" onclick="saveItem()">💾 Guardar</button>
+                    <button class="btn btn-secondary" onclick="toggleAddForm()">❌ Cancelar</button>
+                </div>
+            </div>
+
+            <div class="item-list" id="itemList"></div>
         </div>
 
-        <div class="itinerary" id="itinerarySection">
-            <h3>📅 Itinerario</h3>
+        <!-- ITINERARIO -->
+        <div class="section">
+            <h3>📅 Tu Itinerario</h3>
             <div id="itineraryContent"></div>
         </div>
 
@@ -386,91 +457,56 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        const wardrobe = {
-            top: {
-                label: 'TOP',
-                labelClass: 'label-top',
-                items: [
-                    { name: 'Camisa lino terracota', icon: '👔', color: '#C75B3A' },
-                    { name: 'Polo punto mostaza', icon: '👕', color: '#C9A227' },
-                    { name: 'Camisa oxford camel', icon: '👔', color: '#D4A574' },
-                    { name: 'T-shirt orgánica oliva', icon: '👕', color: '#6B7B3E' },
-                    { name: 'Camisa franela borgoña', icon: '👔', color: '#722F37' },
-                    { name: 'Henley algodón crema', icon: '👕', color: '#E8D5B5' },
-                    { name: 'Camisa chambray cálido', icon: '👔', color: '#4A6741' },
-                    { name: 'Polo piqué naranja', icon: '👕', color: '#D4853A' },
-                    { name: 'Camisa seda estampada', icon: '👔', color: '#8B4513' }
-                ]
-            },
-            bottom: {
-                label: 'BOTTOM',
-                labelClass: 'label-bottom',
-                items: [
-                    { name: 'Chinos caqui profundo', icon: '👖', color: '#8B7355' },
-                    { name: 'Jeans raw selvedge', icon: '👖', color: '#2C3E50' },
-                    { name: 'Pantalón lino tabaco', icon: '👖', color: '#A0522D' },
-                    { name: 'Joggers algodón oliva', icon: '👖', color: '#556B2F' },
-                    { name: 'Pantalón tailored café', icon: '👖', color: '#5D4037' },
-                    { name: 'Shorts bermuda mostaza', icon: '🩳', color: '#C9A227' },
-                    { name: 'Jeans blanco roto', icon: '👖', color: '#F5F5DC' },
-                    { name: 'Cargo verde musgo', icon: '👖', color: '#4A5D23' },
-                    { name: 'Vestir gris cálido', icon: '👖', color: '#8B8680' }
-                ]
-            },
-            layer: {
-                label: 'LAYER',
-                labelClass: 'label-layer',
-                items: [
-                    { name: 'Cárdigan merino camel', icon: '🧥', color: '#D4A574' },
-                    { name: 'Chaqueta campo verde', icon: '🧥', color: '#4A5D23' },
-                    { name: 'Sobrecamisa lana borgoña', icon: '🧥', color: '#722F37' },
-                    { name: 'Bomber ante marrón', icon: '🧥', color: '#8B4513' },
-                    { name: 'Americana tweed marrón', icon: '🧥', color: '#6B4423' },
-                    { name: 'Chaleco acolchado oliva', icon: '🦺', color: '#6B7B3E' },
-                    { name: 'Cazadora denim lavada', icon: '🧥', color: '#5B7C99' },
-                    { name: 'Parka ligera mostaza', icon: '🧥', color: '#C9A227' },
-                    { name: 'Blazer lino sin forro', icon: '🧥', color: '#A0522D' }
-                ]
-            }
+        // === IMÁGENES DE EJEMPLO (URLs reales) ===
+        const DEFAULT_IMAGES = {
+            top: [
+                { name: 'Camisa lino terracota', img: 'https://linentrail.com/cdn/shop/files/craig-pure-linen-v-neck-full-sleeve-shirt-terracotta-red_1080x.jpg?v=1699512345', color: '#C75B3A' },
+                { name: 'Polo punto mostaza', img: 'https://images.unsplash.com/photo-1625910513413-5fc4e5e6727e?w=300&h=300&fit=crop', color: '#C9A227' },
+                { name: 'Camisa oxford camel', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop', color: '#D4A574' },
+                { name: 'T-shirt orgánica oliva', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', color: '#6B7B3E' },
+                { name: 'Camisa franela borgoña', img: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300&h=300&fit=crop', color: '#722F37' },
+                { name: 'Henley algodón crema', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=300&h=300&fit=crop', color: '#E8D5B5' }
+            ],
+            bottom: [
+                { name: 'Chinos caqui profundo', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&h=300&fit=crop', color: '#8B7355' },
+                { name: 'Jeans raw selvedge', img: 'https://images.unsplash.com/photo-1542272617-08f086302542?w=300&h=300&fit=crop', color: '#2C3E50' },
+                { name: 'Pantalón lino tabaco', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop', color: '#A0522D' },
+                { name: 'Joggers algodón oliva', img: 'https://images.unsplash.com/photo-1517438476312-10d79c077509?w=300&h=300&fit=crop', color: '#556B2F' },
+                { name: 'Pantalón tailored café', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=300&h=300&fit=crop', color: '#5D4037' },
+                { name: 'Shorts bermuda mostaza', img: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=300&h=300&fit=crop', color: '#C9A227' }
+            ],
+            layer: [
+                { name: 'Cárdigan merino camel', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop', color: '#D4A574' },
+                { name: 'Chaqueta campo verde', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=300&fit=crop', color: '#4A5D23' },
+                { name: 'Sobrecamisa lana borgoña', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&h=300&fit=crop', color: '#722F37' },
+                { name: 'Bomber ante marrón', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&h=300&fit=crop', color: '#8B4513' },
+                { name: 'Americana tweed marrón', img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=300&h=300&fit=crop', color: '#6B4423' },
+                { name: 'Chaleco acolchado oliva', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=300&h=300&fit=crop', color: '#6B7B3E' }
+            ]
         };
 
-        const vacationWardrobe = {
-            top: {
-                label: 'TOP',
-                labelClass: 'label-top',
-                items: [
-                    { name: 'Linen shirt terracota', icon: '👔', color: '#C75B3A' },
-                    { name: 'Breton stripe cream', icon: '👕', color: '#F5F5DC' },
-                    { name: 'Cuban collar floral', icon: '👔', color: '#D4853A' },
-                    { name: 'Tank top oliva', icon: '🎽', color: '#6B7B3E' },
-                    { name: 'Polo terry mostaza', icon: '👕', color: '#C9A227' },
-                    { name: 'Camp collar palm', icon: '👔', color: '#2F4F2F' }
-                ]
-            },
-            bottom: {
-                label: 'BOTTOM',
-                labelClass: 'label-bottom',
-                items: [
-                    { name: 'Linen shorts caqui', icon: '🩳', color: '#C3B091' },
-                    { name: 'Swim trunks terracota', icon: '🩳', color: '#C75B3A' },
-                    { name: 'Chino shorts tabaco', icon: '🩳', color: '#A0522D' },
-                    { name: 'Lightweight trousers crema', icon: '👖', color: '#FAF3E8' },
-                    { name: 'Drawstring pants oliva', icon: '👖', color: '#556B2F' },
-                    { name: 'Denim shorts vintage', icon: '🩳', color: '#5B7C99' }
-                ]
-            },
-            layer: {
-                label: 'LAYER',
-                labelClass: 'label-layer',
-                items: [
-                    { name: 'Linen blazer unstructured', icon: '🧥', color: '#D4A574' },
-                    { name: 'Chore jacket lightweight', icon: '🧥', color: '#8B7355' },
-                    { name: 'Hoodie terry camel', icon: '🧥', color: '#C3B091' },
-                    { name: 'Overshirt linen olive', icon: '🧥', color: '#6B7B3E' },
-                    { name: 'Windbreaker packable', icon: '🧥', color: '#C9A227' },
-                    { name: 'Kimono jacket light', icon: '🧥', color: '#A0522D' }
-                ]
-            }
+        const VACATION_IMAGES = {
+            top: [
+                { name: 'Linen shirt terracota', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop', color: '#C75B3A' },
+                { name: 'Breton stripe cream', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=300&h=300&fit=crop', color: '#F5F5DC' },
+                { name: 'Cuban collar floral', img: 'https://images.unsplash.com/photo-1589310243389-96a5483213a8?w=300&h=300&fit=crop', color: '#D4853A' },
+                { name: 'Tank top oliva', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', color: '#6B7B3E' },
+                { name: 'Polo terry mostaza', img: 'https://images.unsplash.com/photo-1625910513413-5fc4e5e6727e?w=300&h=300&fit=crop', color: '#C9A227' }
+            ],
+            bottom: [
+                { name: 'Linen shorts caqui', img: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=300&h=300&fit=crop', color: '#C3B091' },
+                { name: 'Swim trunks terracota', img: 'https://images.unsplash.com/photo-1564859228273-278a27851711?w=300&h=300&fit=crop', color: '#C75B3A' },
+                { name: 'Chino shorts tabaco', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=300&h=300&fit=crop', color: '#A0522D' },
+                { name: 'Lightweight trousers crema', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop', color: '#FAF3E8' },
+                { name: 'Drawstring pants oliva', img: 'https://images.unsplash.com/photo-1517438476312-10d79c077509?w=300&h=300&fit=crop', color: '#556B2F' }
+            ],
+            layer: [
+                { name: 'Linen blazer unstructured', img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=300&h=300&fit=crop', color: '#D4A574' },
+                { name: 'Chore jacket lightweight', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=300&fit=crop', color: '#8B7355' },
+                { name: 'Hoodie terry camel', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop', color: '#C3B091' },
+                { name: 'Overshirt linen olive', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&h=300&fit=crop', color: '#6B7B3E' },
+                { name: 'Windbreaker packable', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=300&h=300&fit=crop', color: '#C9A227' }
+            ]
         };
 
         const sudokuPattern = [
@@ -482,17 +518,29 @@
         let currentMode = 'week';
         let lockedCells = new Set();
         let currentGrid = [];
+        let editorTab = 'top';
+        let editingId = null;
+
+        // === LOCALSTORAGE ===
+        function loadWardrobe() {
+            const saved = localStorage.getItem('myWardrobe_' + currentMode);
+            if (saved) return JSON.parse(saved);
+            return currentMode === 'vacation' ? JSON.parse(JSON.stringify(VACATION_IMAGES)) : JSON.parse(JSON.stringify(DEFAULT_IMAGES));
+        }
+
+        function saveWardrobe(data) {
+            localStorage.setItem('myWardrobe_' + currentMode, JSON.stringify(data));
+        }
+
+        let myWardrobe = loadWardrobe();
 
         function init() {
             renderGrid();
-            renderLegend();
+            renderEditor();
             generateItinerary();
         }
 
-        function getCurrentWardrobe() {
-            return currentMode === 'vacation' ? vacationWardrobe : wardrobe;
-        }
-
+        // === GRID ===
         function renderGrid() {
             const grid = document.getElementById('sudokuGrid');
             grid.innerHTML = '';
@@ -501,9 +549,19 @@
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
                     const type = sudokuPattern[row][col];
-                    const category = getCurrentWardrobe()[type];
-                    const randomItem = category.items[Math.floor(Math.random() * category.items.length)];
-                    
+                    const items = myWardrobe[type];
+                    if (!items || items.length === 0) {
+                        currentGrid.push({ row, col, type, item: null });
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        cell.innerHTML = `
+                            <div class="cell-label label-${type}">${type.toUpperCase()}</div>
+                            <div style="padding:20px;color:var(--rust);font-size:0.75rem;">Sin prendas</div>
+                        `;
+                        grid.appendChild(cell);
+                        continue;
+                    }
+                    const randomItem = items[Math.floor(Math.random() * items.length)];
                     currentGrid.push({ row, col, type, item: randomItem });
 
                     const cell = document.createElement('div');
@@ -512,9 +570,13 @@
                     cell.dataset.col = col;
                     cell.onclick = () => toggleLock(row, col);
 
+                    const imgHtml = randomItem.img ? 
+                        `<img src="${randomItem.img}" class="cell-img" alt="${randomItem.name}" onerror="this.style.display='none'">` : 
+                        `<div style="width:100%;height:85px;background:var(--warm-beige);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:4px;">👕</div>`;
+
                     cell.innerHTML = `
-                        <div class="cell-label ${category.labelClass}">${category.label}</div>
-                        <div class="cell-icon">${randomItem.icon}</div>
+                        <div class="cell-label label-${type}">${type.toUpperCase()}</div>
+                        ${imgHtml}
                         <div class="cell-content">${randomItem.name}</div>
                     `;
 
@@ -536,24 +598,28 @@
 
         function randomizeUnlocked() {
             const cells = document.querySelectorAll('.cell');
-            const wardrobe = getCurrentWardrobe();
-
             cells.forEach((cell, index) => {
                 const row = Math.floor(index / 3);
                 const col = index % 3;
                 
                 if (!lockedCells.has(`${row}-${col}`)) {
                     const type = sudokuPattern[row][col];
-                    const category = wardrobe[type];
-                    const randomItem = category.items[Math.floor(Math.random() * category.items.length)];
-                    
-                    currentGrid[index] = { row, col, type, item: randomItem };
-                    
-                    cell.querySelector('.cell-icon').textContent = randomItem.icon;
-                    cell.querySelector('.cell-content').textContent = randomItem.name;
+                    const items = myWardrobe[type];
+                    if (items && items.length > 0) {
+                        const randomItem = items[Math.floor(Math.random() * items.length)];
+                        currentGrid[index] = { row, col, type, item: randomItem };
+                        
+                        const imgEl = cell.querySelector('.cell-img');
+                        if (imgEl && randomItem.img) {
+                            imgEl.src = randomItem.img;
+                            imgEl.style.display = 'block';
+                            imgEl.onerror = function() { this.style.display = 'none'; };
+                        }
+                        const contentEl = cell.querySelector('.cell-content');
+                        if (contentEl) contentEl.textContent = randomItem.name;
+                    }
                 }
             });
-
             generateItinerary();
             showToast('🔓 Solo libres cambiaron');
         }
@@ -567,6 +633,7 @@
         function toggleLock(row, col) {
             const key = `${row}-${col}`;
             const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            if (!cell) return;
             
             if (lockedCells.has(key)) {
                 lockedCells.delete(key);
@@ -584,33 +651,136 @@
             document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             lockedCells.clear();
+            myWardrobe = loadWardrobe();
             renderGrid();
-            renderLegend();
+            renderEditor();
             generateItinerary();
-            showToast(mode === 'vacation' ? '✈️ Modo vacaciones' : '📅 Modo semana');
+            showToast(mode === 'vacation' ? '✈️ Vacaciones' : '📅 Semana');
         }
 
-        function renderLegend() {
-            const legend = document.getElementById('legendGrid');
-            const wardrobe = getCurrentWardrobe();
-            legend.innerHTML = '';
-
-            Object.entries(wardrobe).forEach(([type, category]) => {
-                category.items.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'legend-item';
-                    div.innerHTML = `
-                        <div class="icon">${item.icon}</div>
-                        <div class="info">
-                            <h4>${item.name}</h4>
-                            <p>${category.label} · Warm Autumn</p>
-                        </div>
-                    `;
-                    legend.appendChild(div);
-                });
-            });
+        // === EDITOR ===
+        function setEditorTab(tab) {
+            editorTab = tab;
+            document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderEditor();
         }
 
+        function toggleAddForm() {
+            const form = document.getElementById('addForm');
+            form.classList.toggle('active');
+            if (!form.classList.contains('active')) {
+                document.getElementById('itemName').value = '';
+                document.getElementById('itemImage').value = '';
+                document.getElementById('itemCategory').value = editorTab;
+                editingId = null;
+            }
+        }
+
+        function saveItem() {
+            const name = document.getElementById('itemName').value.trim();
+            const img = document.getElementById('itemImage').value.trim();
+            const category = document.getElementById('itemCategory').value;
+            
+            if (!name) {
+                showToast('❌ Escribe un nombre');
+                return;
+            }
+
+            const newItem = { name, img: img || '', color: '#8B4513' };
+            
+            if (!myWardrobe[category]) myWardrobe[category] = [];
+            
+            if (editingId !== null) {
+                // Editar existente
+                const idx = myWardrobe[category].findIndex((_, i) => i === editingId);
+                if (idx >= 0) myWardrobe[category][idx] = newItem;
+            } else {
+                // Agregar nuevo
+                myWardrobe[category].push(newItem);
+            }
+            
+            saveWardrobe(myWardrobe);
+            toggleAddForm();
+            renderEditor();
+            renderGrid();
+            generateItinerary();
+            showToast(editingId !== null ? '✏️ Prenda actualizada' : '✅ Prenda agregada');
+        }
+
+        function editItem(category, index) {
+            const item = myWardrobe[category][index];
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemImage').value = item.img || '';
+            document.getElementById('itemCategory').value = category;
+            editingId = index;
+            
+            // Cambiar al tab correcto
+            editorTab = category;
+            document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.cat-tab')[['top','bottom','layer'].indexOf(category)].classList.add('active');
+            
+            document.getElementById('addForm').classList.add('active');
+            renderEditor();
+            showToast('✏️ Editando prenda');
+        }
+
+        function deleteItem(category, index) {
+            if (confirm('¿Eliminar esta prenda?')) {
+                myWardrobe[category].splice(index, 1);
+                saveWardrobe(myWardrobe);
+                renderEditor();
+                renderGrid();
+                generateItinerary();
+                showToast('🗑️ Prenda eliminada');
+            }
+        }
+
+        function resetToDefaults() {
+            if (confirm('¿Restaurar prendas de ejemplo? Se borrarán tus personalizaciones.')) {
+                localStorage.removeItem('myWardrobe_' + currentMode);
+                myWardrobe = currentMode === 'vacation' ? JSON.parse(JSON.stringify(VACATION_IMAGES)) : JSON.parse(JSON.stringify(DEFAULT_IMAGES));
+                saveWardrobe(myWardrobe);
+                renderEditor();
+                renderGrid();
+                generateItinerary();
+                showToast('↩️ Defaults restaurados');
+            }
+        }
+
+        function renderEditor() {
+            const list = document.getElementById('itemList');
+            const items = myWardrobe[editorTab] || [];
+            
+            if (items.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="big">👕</div>
+                        <p>No tienes prendas en esta categoría.<br>Toca "Agregar prenda" para empezar.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = items.map((item, idx) => `
+                <div class="item-row">
+                    ${item.img ? 
+                        `<img src="${item.img}" alt="${item.name}" onerror="this.src=''">` : 
+                        `<div style="width:50px;height:50px;background:var(--warm-beige);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">👕</div>`
+                    }
+                    <div class="info">
+                        <h4>${item.name}</h4>
+                        <p>${editorTab.toUpperCase()} · Warm Autumn</p>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="editItem('${editorTab}', ${idx})">✏️</button>
+                        <button class="btn-delete" onclick="deleteItem('${editorTab}', ${idx})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // === ITINERARIO ===
         function generateItinerary() {
             const container = document.getElementById('itineraryContent');
             const days = currentMode === 'vacation' 
@@ -625,9 +795,11 @@
 
             for (let day = 0; day < 7; day++) {
                 const rowIndex = day % 3;
-                const rowItems = currentGrid.filter(item => item.row === rowIndex);
+                const rowItems = currentGrid.filter(item => item.row === rowIndex && item.item);
                 
-                const outfit = rowItems.map(item => `${item.item.icon} ${item.item.name}`).join(' + ');
+                const outfit = rowItems.length > 0 
+                    ? rowItems.map(item => item.item.name).join(' + ')
+                    : 'Agrega prendas a tu closet primero';
                 
                 const card = document.createElement('div');
                 card.className = 'day-card';
@@ -652,4 +824,10 @@
         init();
     </script>
 </body>
-</html>
+</html>'''
+
+with open('/mnt/agents/output/sudoku_estilo_v2.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("✅ Archivo v2 generado con imágenes reales y closet editable")
+print("📁 Ruta: /mnt/agents/output/sudoku_estilo_v2.html")
