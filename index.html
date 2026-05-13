@@ -17,6 +17,9 @@
             --mustard: #C9A227;
             --burgundy: #722F37;
             --forest: #2F4F2F;
+            --camel: #C19A6B;
+            --tabac: #A0522D;
+            --cream: #F5F5DC;
             --locked: #E74C3C;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -115,11 +118,11 @@
         .cell {
             background: white;
             border-radius: 12px;
-            padding: 8px 6px;
+            padding: 10px 6px;
             text-align: center;
             position: relative;
             transition: all 0.3s ease;
-            min-height: 160px;
+            min-height: 150px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -147,7 +150,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             padding: 2px 8px;
             border-radius: 15px;
             color: white;
@@ -155,16 +158,21 @@
         .label-top { background: var(--terracotta); }
         .label-bottom { background: var(--olive); }
         .label-layer { background: var(--mustard); color: var(--deep-brown); }
-        .cell-img {
+        .cell-icon {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cell-icon svg {
             width: 100%;
-            height: 85px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 4px;
-            background: var(--warm-cream);
+            height: 100%;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
         .cell-content {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--deep-brown);
             line-height: 1.2;
@@ -223,7 +231,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 300px;
+            max-height: 350px;
             overflow-y: auto;
         }
         .item-row {
@@ -235,13 +243,17 @@
             border-radius: 12px;
             border-left: 3px solid var(--burnt-orange);
         }
-        .item-row img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 8px;
+        .item-row .item-icon {
+            width: 45px;
+            height: 45px;
             flex-shrink: 0;
-            background: var(--warm-beige);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .item-row .item-icon svg {
+            width: 100%;
+            height: 100%;
         }
         .item-row .info { flex: 1; }
         .item-row .info h4 { font-size: 0.85rem; color: var(--deep-brown); }
@@ -367,6 +379,32 @@
             font-size: 0.9rem;
         }
         .empty-state .big { font-size: 2.5rem; margin-bottom: 8px; }
+
+        .icon-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .icon-option {
+            padding: 10px;
+            border: 2px solid var(--warm-beige);
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            background: white;
+        }
+        .icon-option.selected {
+            border-color: var(--terracotta);
+            background: var(--warm-cream);
+        }
+        .icon-option svg {
+            width: 35px;
+            height: 35px;
+            margin: 0 auto;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -393,7 +431,7 @@
         <div class="section">
             <h3>👕 Mi Closet (Editable)</h3>
             <p style="font-size:0.8rem;color:var(--rust);margin-bottom:12px;">
-                Agrega, edita o elimina prendas. Se guarda automáticamente en tu navegador.
+                Agrega, edita o elimina prendas. Se guarda automáticamente.
             </p>
             
             <div class="category-tabs">
@@ -413,8 +451,12 @@
                     <input type="text" id="itemName" placeholder="Ej: Camisa de lino terracota">
                 </div>
                 <div class="form-group">
-                    <label>URL de imagen (opcional)</label>
-                    <input type="text" id="itemImage" placeholder="Pega link de foto o déjalo vacío">
+                    <label>Color (código HEX)</label>
+                    <input type="text" id="itemColor" placeholder="#C75B3A o deja vacío para auto">
+                </div>
+                <div class="form-group">
+                    <label>Elige un icono</label>
+                    <div class="icon-selector" id="iconSelector"></div>
                 </div>
                 <div class="form-group">
                     <label>Categoría</label>
@@ -455,55 +497,203 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // === IMÁGENES DE EJEMPLO (URLs reales) ===
-        const DEFAULT_IMAGES = {
+        // === ICONOS SVG ===
+        const ICONS = {
+            shirt: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M30 15 L20 25 L25 35 L35 28 L35 85 L65 85 L65 28 L75 35 L80 25 L70 15 L55 15 L50 22 L45 15 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="50" y1="22" x2="50" y2="85" stroke="#3D2B1F" stroke-width="1.5"/>
+                <circle cx="50" cy="35" r="2" fill="#3D2B1F"/>
+                <circle cx="50" cy="50" r="2" fill="#3D2B1F"/>
+                <circle cx="50" cy="65" r="2" fill="#3D2B1F"/>
+            </svg>`,
+            
+            polo: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M30 15 L20 25 L25 32 L35 25 L35 85 L65 85 L65 25 L75 32 L80 25 L70 15 L58 15 L50 22 L42 15 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="50" y1="22" x2="50" y2="85" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M45 15 L50 22 L55 15" fill="none" stroke="#3D2B1F" stroke-width="2"/>
+            </svg>`,
+            
+            tshirt: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25 20 L15 30 L22 38 L32 30 L32 85 L68 85 L68 30 L78 38 L85 30 L75 20 L60 20 L50 28 L40 20 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+            </svg>`,
+            
+            henley: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M28 18 L18 28 L24 35 L34 26 L34 85 L66 85 L66 26 L76 35 L82 28 L72 18 L58 18 L50 26 L42 18 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="50" y1="26" x2="50" y2="45" stroke="#3D2B1F" stroke-width="1.5"/>
+                <circle cx="50" cy="35" r="1.8" fill="#3D2B1F"/>
+                <circle cx="50" cy="42" r="1.8" fill="#3D2B1F"/>
+            </svg>`,
+            
+            pants: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 10 L32 40 L28 90 L42 90 L48 45 L52 45 L58 90 L72 90 L68 40 L68 10 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="32" y1="25" x2="68" y2="25" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M45 10 L55 10 L52 18 L48 18 Z" fill="#3D2B1F" opacity="0.3"/>
+            </svg>`,
+            
+            chinos: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M30 10 L30 38 L26 88 L44 88 L48 48 L52 48 L56 88 L74 88 L70 38 L70 10 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="30" y1="22" x2="70" y2="22" stroke="#3D2B1F" stroke-width="1.5"/>
+                <rect x="46" y="8" width="8" height="6" rx="1" fill="#3D2B1F" opacity="0.4"/>
+            </svg>`,
+            
+            shorts: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 10 L32 35 L28 55 L46 55 L48 38 L52 38 L54 55 L72 55 L68 35 L68 10 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="32" y1="22" x2="68" y2="22" stroke="#3D2B1F" stroke-width="1.5"/>
+                <line x1="28" y1="35" x2="72" y2="35" stroke="#3D2B1F" stroke-width="1" stroke-dasharray="3,2"/>
+            </svg>`,
+            
+            jeans: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 10 L32 40 L28 90 L42 90 L48 48 L52 48 L58 90 L72 90 L68 40 L68 10 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="32" y1="25" x2="68" y2="25" stroke="#3D2B1F" stroke-width="1.5"/>
+                <rect x="34" y="55" width="4" height="12" rx="1" fill="#3D2B1F" opacity="0.2"/>
+                <rect x="62" y="55" width="4" height="12" rx="1" fill="#3D2B1F" opacity="0.2"/>
+            </svg>`,
+            
+            cardigan: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25 15 L15 25 L20 35 L30 28 L30 85 L70 85 L70 28 L80 35 L85 25 L75 15 L60 15 L55 22 L50 28 L45 22 L40 15 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="50" y1="28" x2="50" y2="85" stroke="#3D2B1F" stroke-width="1.5"/>
+                <circle cx="50" cy="40" r="2" fill="#3D2B1F"/>
+                <circle cx="50" cy="55" r="2" fill="#3D2B1F"/>
+                <circle cx="50" cy="70" r="2" fill="#3D2B1F"/>
+                <path d="M35 35 L40 35" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M60 35 L65 35" stroke="#3D2B1F" stroke-width="1.5"/>
+            </svg>`,
+            
+            jacket: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 12 L12 22 L18 32 L28 25 L28 88 L72 88 L72 25 L82 32 L88 22 L78 12 L62 12 L55 20 L50 26 L45 20 L38 12 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="50" y1="26" x2="50" y2="88" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M28 45 L38 45" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M62 45 L72 45" stroke="#3D2B1F" stroke-width="1.5"/>
+                <circle cx="50" cy="40" r="2" fill="#3D2B1F"/>
+            </svg>`,
+            
+            blazer: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25 12 L15 22 L20 30 L30 24 L30 88 L70 88 L70 24 L80 30 L85 22 L75 12 L60 12 L55 18 L50 24 L45 18 L40 12 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="50" y1="24" x2="50" y2="88" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M35 30 L45 35 L50 30" fill="none" stroke="#3D2B1F" stroke-width="1"/>
+                <path d="M65 30 L55 35 L50 30" fill="none" stroke="#3D2B1F" stroke-width="1"/>
+                <rect x="48" y="32" width="4" height="3" fill="#3D2B1F" opacity="0.5"/>
+            </svg>`,
+            
+            vest: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M30 15 L25 25 L30 35 L35 30 L35 85 L65 85 L65 30 L70 35 L75 25 L70 15 L55 15 L50 22 L45 15 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="50" y1="22" x2="50" y2="85" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M35 30 L65 30" stroke="#3D2B1F" stroke-width="1"/>
+                <path d="M35 50 L65 50" stroke="#3D2B1F" stroke-width="1"/>
+                <path d="M35 70 L65 70" stroke="#3D2B1F" stroke-width="1"/>
+            </svg>`,
+            
+            overshirt: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M28 12 L18 22 L24 30 L34 24 L34 88 L66 88 L66 24 L76 30 L82 22 L72 12 L58 12 L52 20 L50 24 L48 20 L42 12 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="50" y1="24" x2="50" y2="88" stroke="#3D2B1F" stroke-width="1.5"/>
+                <rect x="36" y="40" width="10" height="12" rx="1" fill="#3D2B1F" opacity="0.15"/>
+                <rect x="54" y="40" width="10" height="12" rx="1" fill="#3D2B1F" opacity="0.15"/>
+            </svg>`,
+            
+            hoodie: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25 18 L15 28 L20 36 L30 30 L30 88 L70 88 L70 30 L80 36 L85 28 L75 18 L60 18 L55 24 L50 18 L45 24 L40 18 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <ellipse cx="50" cy="12" rx="12" ry="8" fill="COLOR" stroke="#3D2B1F" stroke-width="2"/>
+                <path d="M40 12 Q50 8 60 12" fill="none" stroke="#3D2B1F" stroke-width="1.5"/>
+                <line x1="50" y1="24" x2="50" y2="88" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M40 55 L60 55 L55 70 L45 70 Z" fill="#3D2B1F" opacity="0.15"/>
+            </svg>`,
+            
+            swim: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 15 L32 30 L28 50 L46 50 L48 35 L52 35 L54 50 L72 50 L68 30 L68 15 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="32" y1="22" x2="68" y2="22" stroke="#3D2B1F" stroke-width="1.5"/>
+                <path d="M30 35 Q50 30 70 35" fill="none" stroke="#3D2B1F" stroke-width="1" stroke-dasharray="2,2"/>
+                <circle cx="38" cy="42" r="2" fill="#3D2B1F" opacity="0.3"/>
+                <circle cx="62" cy="42" r="2" fill="#3D2B1F" opacity="0.3"/>
+            </svg>`,
+            
+            tank: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M35 12 L28 20 L32 28 L38 22 L38 88 L62 88 L62 22 L68 28 L72 20 L65 12 L55 12 L50 18 L45 12 Z" 
+                fill="COLOR" stroke="#3D2B1F" stroke-width="2" stroke-linejoin="round"/>
+            </svg>`
+        };
+
+        const ICON_KEYS = Object.keys(ICONS);
+
+        // === COLORES WARM AUTUMN ===
+        const WARM_COLORS = {
+            terracotta: '#C75B3A',
+            burntOrange: '#D4853A',
+            olive: '#6B7B3E',
+            rust: '#8B4513',
+            mustard: '#C9A227',
+            burgundy: '#722F37',
+            camel: '#C19A6B',
+            tabac: '#A0522D',
+            cream: '#F5F5DC',
+            forest: '#2F4F2F',
+            khaki: '#8B7355',
+            denim: '#5B7C99'
+        };
+
+        // === WARDROBE DEFAULTS ===
+        const DEFAULT_WARDROBE = {
             top: [
-                { name: 'Camisa lino terracota', img: 'https://linentrail.com/cdn/shop/files/craig-pure-linen-v-neck-full-sleeve-shirt-terracotta-red_1080x.jpg?v=1699512345', color: '#C75B3A' },
-                { name: 'Polo punto mostaza', img: 'https://images.unsplash.com/photo-1625910513413-5fc4e5e6727e?w=300&h=300&fit=crop', color: '#C9A227' },
-                { name: 'Camisa oxford camel', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop', color: '#D4A574' },
-                { name: 'T-shirt orgánica oliva', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', color: '#6B7B3E' },
-                { name: 'Camisa franela borgoña', img: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300&h=300&fit=crop', color: '#722F37' },
-                { name: 'Henley algodón crema', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=300&h=300&fit=crop', color: '#E8D5B5' }
+                { name: 'Camisa lino terracota', icon: 'shirt', color: WARM_COLORS.terracotta },
+                { name: 'Polo punto mostaza', icon: 'polo', color: WARM_COLORS.mustard },
+                { name: 'Camisa oxford camel', icon: 'shirt', color: WARM_COLORS.camel },
+                { name: 'T-shirt orgánica oliva', icon: 'tshirt', color: WARM_COLORS.olive },
+                { name: 'Camisa franela borgoña', icon: 'shirt', color: WARM_COLORS.burgundy },
+                { name: 'Henley algodón crema', icon: 'henley', color: WARM_COLORS.cream }
             ],
             bottom: [
-                { name: 'Chinos caqui profundo', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&h=300&fit=crop', color: '#8B7355' },
-                { name: 'Jeans raw selvedge', img: 'https://images.unsplash.com/photo-1542272617-08f086302542?w=300&h=300&fit=crop', color: '#2C3E50' },
-                { name: 'Pantalón lino tabaco', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop', color: '#A0522D' },
-                { name: 'Joggers algodón oliva', img: 'https://images.unsplash.com/photo-1517438476312-10d79c077509?w=300&h=300&fit=crop', color: '#556B2F' },
-                { name: 'Pantalón tailored café', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=300&h=300&fit=crop', color: '#5D4037' },
-                { name: 'Shorts bermuda mostaza', img: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=300&h=300&fit=crop', color: '#C9A227' }
+                { name: 'Chinos caqui profundo', icon: 'chinos', color: WARM_COLORS.khaki },
+                { name: 'Jeans raw selvedge', icon: 'jeans', color: WARM_COLORS.denim },
+                { name: 'Pantalón lino tabaco', icon: 'pants', color: WARM_COLORS.tabac },
+                { name: 'Joggers algodón oliva', icon: 'pants', color: WARM_COLORS.olive },
+                { name: 'Pantalón tailored café', icon: 'chinos', color: WARM_COLORS.rust },
+                { name: 'Shorts bermuda mostaza', icon: 'shorts', color: WARM_COLORS.mustard }
             ],
             layer: [
-                { name: 'Cárdigan merino camel', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop', color: '#D4A574' },
-                { name: 'Chaqueta campo verde', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=300&fit=crop', color: '#4A5D23' },
-                { name: 'Sobrecamisa lana borgoña', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&h=300&fit=crop', color: '#722F37' },
-                { name: 'Bomber ante marrón', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&h=300&fit=crop', color: '#8B4513' },
-                { name: 'Americana tweed marrón', img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=300&h=300&fit=crop', color: '#6B4423' },
-                { name: 'Chaleco acolchado oliva', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=300&h=300&fit=crop', color: '#6B7B3E' }
+                { name: 'Cárdigan merino camel', icon: 'cardigan', color: WARM_COLORS.camel },
+                { name: 'Chaqueta campo verde', icon: 'jacket', color: WARM_COLORS.forest },
+                { name: 'Sobrecamisa lana borgoña', icon: 'overshirt', color: WARM_COLORS.burgundy },
+                { name: 'Bomber ante marrón', icon: 'jacket', color: WARM_COLORS.rust },
+                { name: 'Americana tweed marrón', icon: 'blazer', color: WARM_COLORS.tabac },
+                { name: 'Chaleco acolchado oliva', icon: 'vest', color: WARM_COLORS.olive }
             ]
         };
 
-        const VACATION_IMAGES = {
+        const VACATION_WARDROBE = {
             top: [
-                { name: 'Linen shirt terracota', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop', color: '#C75B3A' },
-                { name: 'Breton stripe cream', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=300&h=300&fit=crop', color: '#F5F5DC' },
-                { name: 'Cuban collar floral', img: 'https://images.unsplash.com/photo-1589310243389-96a5483213a8?w=300&h=300&fit=crop', color: '#D4853A' },
-                { name: 'Tank top oliva', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', color: '#6B7B3E' },
-                { name: 'Polo terry mostaza', img: 'https://images.unsplash.com/photo-1625910513413-5fc4e5e6727e?w=300&h=300&fit=crop', color: '#C9A227' }
+                { name: 'Linen shirt terracota', icon: 'shirt', color: WARM_COLORS.terracotta },
+                { name: 'Breton stripe cream', icon: 'tshirt', color: WARM_COLORS.cream },
+                { name: 'Cuban collar floral', icon: 'shirt', color: WARM_COLORS.burntOrange },
+                { name: 'Tank top oliva', icon: 'tank', color: WARM_COLORS.olive },
+                { name: 'Polo terry mostaza', icon: 'polo', color: WARM_COLORS.mustard }
             ],
             bottom: [
-                { name: 'Linen shorts caqui', img: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=300&h=300&fit=crop', color: '#C3B091' },
-                { name: 'Swim trunks terracota', img: 'https://images.unsplash.com/photo-1564859228273-278a27851711?w=300&h=300&fit=crop', color: '#C75B3A' },
-                { name: 'Chino shorts tabaco', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=300&h=300&fit=crop', color: '#A0522D' },
-                { name: 'Lightweight trousers crema', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop', color: '#FAF3E8' },
-                { name: 'Drawstring pants oliva', img: 'https://images.unsplash.com/photo-1517438476312-10d79c077509?w=300&h=300&fit=crop', color: '#556B2F' }
+                { name: 'Linen shorts caqui', icon: 'shorts', color: WARM_COLORS.khaki },
+                { name: 'Swim trunks terracota', icon: 'swim', color: WARM_COLORS.terracotta },
+                { name: 'Chino shorts tabaco', icon: 'shorts', color: WARM_COLORS.tabac },
+                { name: 'Lightweight trousers crema', icon: 'pants', color: WARM_COLORS.cream },
+                { name: 'Drawstring pants oliva', icon: 'pants', color: WARM_COLORS.olive }
             ],
             layer: [
-                { name: 'Linen blazer unstructured', img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=300&h=300&fit=crop', color: '#D4A574' },
-                { name: 'Chore jacket lightweight', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=300&fit=crop', color: '#8B7355' },
-                { name: 'Hoodie terry camel', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop', color: '#C3B091' },
-                { name: 'Overshirt linen olive', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&h=300&fit=crop', color: '#6B7B3E' },
-                { name: 'Windbreaker packable', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=300&h=300&fit=crop', color: '#C9A227' }
+                { name: 'Linen blazer unstructured', icon: 'blazer', color: WARM_COLORS.camel },
+                { name: 'Chore jacket lightweight', icon: 'jacket', color: WARM_COLORS.khaki },
+                { name: 'Hoodie terry camel', icon: 'hoodie', color: WARM_COLORS.camel },
+                { name: 'Overshirt linen olive', icon: 'overshirt', color: WARM_COLORS.olive },
+                { name: 'Windbreaker packable', icon: 'jacket', color: WARM_COLORS.mustard }
             ]
         };
 
@@ -518,16 +708,17 @@
         let currentGrid = [];
         let editorTab = 'top';
         let editingId = null;
+        let selectedIcon = 'shirt';
 
         // === LOCALSTORAGE ===
         function loadWardrobe() {
-            const saved = localStorage.getItem('myWardrobe_' + currentMode);
+            const saved = localStorage.getItem('myWardrobe_v3_' + currentMode);
             if (saved) return JSON.parse(saved);
-            return currentMode === 'vacation' ? JSON.parse(JSON.stringify(VACATION_IMAGES)) : JSON.parse(JSON.stringify(DEFAULT_IMAGES));
+            return currentMode === 'vacation' ? JSON.parse(JSON.stringify(VACATION_WARDROBE)) : JSON.parse(JSON.stringify(DEFAULT_WARDROBE));
         }
 
         function saveWardrobe(data) {
-            localStorage.setItem('myWardrobe_' + currentMode, JSON.stringify(data));
+            localStorage.setItem('myWardrobe_v3_' + currentMode, JSON.stringify(data));
         }
 
         let myWardrobe = loadWardrobe();
@@ -535,7 +726,14 @@
         function init() {
             renderGrid();
             renderEditor();
+            renderIconSelector();
             generateItinerary();
+        }
+
+        // === SVG RENDERER ===
+        function getIconSvg(iconKey, color) {
+            const svg = ICONS[iconKey] || ICONS.shirt;
+            return svg.replace(/COLOR/g, color || '#8B4513');
         }
 
         // === GRID ===
@@ -568,13 +766,9 @@
                     cell.dataset.col = col;
                     cell.onclick = () => toggleLock(row, col);
 
-                    const imgHtml = randomItem.img ? 
-                        `<img src="${randomItem.img}" class="cell-img" alt="${randomItem.name}" onerror="this.style.display='none'">` : 
-                        `<div style="width:100%;height:85px;background:var(--warm-beige);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:4px;">👕</div>`;
-
                     cell.innerHTML = `
                         <div class="cell-label label-${type}">${type.toUpperCase()}</div>
-                        ${imgHtml}
+                        <div class="cell-icon">${getIconSvg(randomItem.icon, randomItem.color)}</div>
                         <div class="cell-content">${randomItem.name}</div>
                     `;
 
@@ -607,12 +801,8 @@
                         const randomItem = items[Math.floor(Math.random() * items.length)];
                         currentGrid[index] = { row, col, type, item: randomItem };
                         
-                        const imgEl = cell.querySelector('.cell-img');
-                        if (imgEl && randomItem.img) {
-                            imgEl.src = randomItem.img;
-                            imgEl.style.display = 'block';
-                            imgEl.onerror = function() { this.style.display = 'none'; };
-                        }
+                        const iconEl = cell.querySelector('.cell-icon');
+                        if (iconEl) iconEl.innerHTML = getIconSvg(randomItem.icon, randomItem.color);
                         const contentEl = cell.querySelector('.cell-content');
                         if (contentEl) contentEl.textContent = randomItem.name;
                     }
@@ -669,15 +859,31 @@
             form.classList.toggle('active');
             if (!form.classList.contains('active')) {
                 document.getElementById('itemName').value = '';
-                document.getElementById('itemImage').value = '';
+                document.getElementById('itemColor').value = '';
                 document.getElementById('itemCategory').value = editorTab;
                 editingId = null;
+                selectedIcon = 'shirt';
+                renderIconSelector();
             }
+        }
+
+        function renderIconSelector() {
+            const container = document.getElementById('iconSelector');
+            container.innerHTML = ICON_KEYS.map(key => `
+                <div class="icon-option ${key === selectedIcon ? 'selected' : ''}" onclick="selectIcon('${key}')">
+                    ${getIconSvg(key, '#8B4513')}
+                </div>
+            `).join('');
+        }
+
+        function selectIcon(key) {
+            selectedIcon = key;
+            renderIconSelector();
         }
 
         function saveItem() {
             const name = document.getElementById('itemName').value.trim();
-            const img = document.getElementById('itemImage').value.trim();
+            const colorInput = document.getElementById('itemColor').value.trim();
             const category = document.getElementById('itemCategory').value;
             
             if (!name) {
@@ -685,7 +891,8 @@
                 return;
             }
 
-            const newItem = { name, img: img || '', color: '#8B4513' };
+            const color = colorInput || WARM_COLORS.rust;
+            const newItem = { name, icon: selectedIcon, color };
             
             if (!myWardrobe[category]) myWardrobe[category] = [];
             
@@ -707,8 +914,9 @@
         function editItem(category, index) {
             const item = myWardrobe[category][index];
             document.getElementById('itemName').value = item.name;
-            document.getElementById('itemImage').value = item.img || '';
+            document.getElementById('itemColor').value = item.color || '';
             document.getElementById('itemCategory').value = category;
+            selectedIcon = item.icon || 'shirt';
             editingId = index;
             
             editorTab = category;
@@ -716,6 +924,7 @@
             document.querySelectorAll('.cat-tab')[['top','bottom','layer'].indexOf(category)].classList.add('active');
             
             document.getElementById('addForm').classList.add('active');
+            renderIconSelector();
             renderEditor();
             showToast('✏️ Editando prenda');
         }
@@ -733,8 +942,8 @@
 
         function resetToDefaults() {
             if (confirm('¿Restaurar prendas de ejemplo? Se borrarán tus personalizaciones.')) {
-                localStorage.removeItem('myWardrobe_' + currentMode);
-                myWardrobe = currentMode === 'vacation' ? JSON.parse(JSON.stringify(VACATION_IMAGES)) : JSON.parse(JSON.stringify(DEFAULT_IMAGES));
+                localStorage.removeItem('myWardrobe_v3_' + currentMode);
+                myWardrobe = currentMode === 'vacation' ? JSON.parse(JSON.stringify(VACATION_WARDROBE)) : JSON.parse(JSON.stringify(DEFAULT_WARDROBE));
                 saveWardrobe(myWardrobe);
                 renderEditor();
                 renderGrid();
@@ -759,13 +968,10 @@
 
             list.innerHTML = items.map((item, idx) => `
                 <div class="item-row">
-                    ${item.img ? 
-                        `<img src="${item.img}" alt="${item.name}" onerror="this.src=''">` : 
-                        `<div style="width:50px;height:50px;background:var(--warm-beige);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">👕</div>`
-                    }
+                    <div class="item-icon">${getIconSvg(item.icon, item.color)}</div>
                     <div class="info">
                         <h4>${item.name}</h4>
-                        <p>${editorTab.toUpperCase()} · Warm Autumn</p>
+                        <p>${editorTab.toUpperCase()} · <span style="display:inline-block;width:12px;height:12px;background:${item.color};border-radius:50%;vertical-align:middle;margin-right:4px;"></span>${item.color}</p>
                     </div>
                     <div class="actions">
                         <button class="btn-edit" onclick="editItem('${editorTab}', ${idx})">✏️</button>
