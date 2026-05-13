@@ -1,6 +1,4 @@
-
-# Crear la app con imágenes reales y closet editable
-html_content = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -692,11 +690,9 @@ html_content = '''<!DOCTYPE html>
             if (!myWardrobe[category]) myWardrobe[category] = [];
             
             if (editingId !== null) {
-                // Editar existente
                 const idx = myWardrobe[category].findIndex((_, i) => i === editingId);
                 if (idx >= 0) myWardrobe[category][idx] = newItem;
             } else {
-                // Agregar nuevo
                 myWardrobe[category].push(newItem);
             }
             
@@ -715,7 +711,6 @@ html_content = '''<!DOCTYPE html>
             document.getElementById('itemCategory').value = category;
             editingId = index;
             
-            // Cambiar al tab correcto
             editorTab = category;
             document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.cat-tab')[['top','bottom','layer'].indexOf(category)].classList.add('active');
@@ -824,10 +819,4 @@ html_content = '''<!DOCTYPE html>
         init();
     </script>
 </body>
-</html>'''
-
-with open('/mnt/agents/output/sudoku_estilo_v2.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
-
-print("✅ Archivo v2 generado con imágenes reales y closet editable")
-print("📁 Ruta: /mnt/agents/output/sudoku_estilo_v2.html")
+</html>
